@@ -1,2 +1,3 @@
 # red-bot
- Multiporpose discord bot.
+
+Alarm bot for Mudae from discord.

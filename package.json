@@ -1,7 +1,7 @@
 {
-  "name": "red-bot",
+  "name": "mudae-alarm-bot",
   "version": "1.0.0",
-  "description": "Multipurpose bot for discord.",
+  "description": "Alarm bot for Mudae from discord.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
