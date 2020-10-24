@@ -7,7 +7,7 @@ exports.createUser = async (message) => {
         mudae_alarm: true,
     });
     newUser.save().then(doc => {
-        message.channel.send(message.author.username + "-sama se ha suscrito a la alarma.");
+        message.channel.send(message.author.username + "-sama se ha suscrito a la alarma. Te avisaré por MP cuando se reseteen tus rolls y claims.");
     }).catch(err => {
         message.channel.send("Ya te encuentras suscrito a la alarma.");
     });
