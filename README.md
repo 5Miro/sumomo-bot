@@ -2,6 +2,7 @@
 Multipurpose bot for Discord. Non-public bot, for personal use only.
 ## Documentation
 **1- Intro**
+
 Sumomo is a node.js application for Discord. It uses the following modules:
 - Discord.js
 > Allows the app to interact with the Discord API.
@@ -13,6 +14,7 @@ Sumomo is a node.js application for Discord. It uses the following modules:
 As  a modular bot, Sumomo will continue to add functionality to its program. This documentation will be updated accordingly.
 
 **2- It works with MongoDB**
+
 MongoDB is a noSQL oriented database system. It does not store data as tables. Instead, it stores a collection of documents as BSON files.
 > BSON files are like JSON, but typed.
 
