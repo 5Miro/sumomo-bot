@@ -28,7 +28,7 @@ Sumomo uses a database to store only *this* information about the discord users 
 
 Sumomo **does not** store any other kind of personal information about the user. Understand that Sumomo works **through** the Discord API.
 
-Sumomo is **NOT** a public bot. Sumomo was built for personal use only. That means that whoever uses Sumomo must provide **their own** database through the enviromental variables.
+Sumomo is **NOT** a public bot. Sumomo was built for personal use only. That means that whoever uses Sumomo's source code must provide **their own** app and database hosting.
 
 **3- Commands**
 
