@@ -5,10 +5,10 @@ dotenv.config({ path: "./config.env" });
 //////////////////////////////
 ////////////////////////////// 
 
+// Connect to database.
 const mongoose = require("mongoose");
 const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.DB_PASSWORD);
 
-// Connect to database.
 mongoose.connect(DB, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -84,22 +84,16 @@ client.on("message", async (message) => {
 //////////////////////////////
 //////////////////////////////
 
-const INITIAL_HOUR = 1; // in hours (UTC time zone)
-const INITIAL_MINUTES = 14; // in minutes
-const CLAIM_INTERVAL = 3; // in hours
-const TIME_CHECK_INTERVAL = 60000 // in miliseconds
-const HOURS_PER_DAY = 24 // obviously
-
 // Checks time periodically.
 client.setInterval(() => {
   // Get current time and date.
   const date = new Date();
 
   // First check MINUTES
-  if (date.getUTCMinutes() == INITIAL_MINUTES) {
+  if (date.getUTCMinutes() == globals.initial_minutes) {
     // Rolls reset.
     // Now check HOURS
-    for (i = INITIAL_HOUR; i < HOURS_PER_DAY; i += CLAIM_INTERVAL) {
+    for (i = globals.initial_hour; i < globals.hours_per_day; i += globals.claim_interval) {
       if (date.getUTCHours() == i) {
         ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length)]); // get random string
         return;
@@ -109,7 +103,7 @@ client.setInterval(() => {
     ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length)]); // get random string
   }
 
-}, TIME_CHECK_INTERVAL);
+}, globals.time_check_interval);
 
 // Get users from DB and then send DM.
 async function ringAlarm(string) {
