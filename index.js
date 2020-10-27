@@ -25,11 +25,11 @@ mongoose.connect(DB, {
 
 const Discord = require("discord.js");
 const fs = require("fs");
-const userController = require("./controllers/userController");
 const globals = require("./globals");
 const strings = require("./strings");
 
 const client = new Discord.Client(); // This client.
+global.client = client;
 
 //////////////////////////////
 //////////////////////////////
@@ -49,13 +49,28 @@ for (const file of commandFiles) {
 //////////////////////////////
 //////////////////////////////
 
+client.modules = new Discord.Collection(); // Create a collection of commands.
+
+// Look for modules in the my_modules folder. They end with .js
+const moduleFiles = fs.readdirSync("./my_modules/").filter((file) => file.endsWith(".js"));
+
+// Loop over the module files and add them to the module collection.
+for (const file of moduleFiles) {
+  const mod = require(`./my_modules/${file}`);
+
+  client.modules.set(mod.name, mod);
+}
+
+//////////////////////////////
+//////////////////////////////
+
 // Listeners for the BOT state.
 client.once("ready", () => {
   console.log("Sumomo: online");
 });
 
 client.on("ready", () => {
-  client.user.setActivity("|help", { type: "PLAYING" });
+  client.user.setActivity(globals.prefix + "help", { type: "PLAYING" });
 });
 
 //////////////////////////////
@@ -63,6 +78,12 @@ client.on("ready", () => {
 
 // Function to read messages.
 client.on("message", async (message) => {
+  // Call OnMessage functions from modules.
+  let modules = client.modules.array();
+  modules.forEach(mod => {
+    if (mod.isActivated) mod.OnMessage(message); // if mod is activated, call function
+  });
+
   // If message comes from bot, return;
   if (message.author.bot) return;
 
@@ -72,52 +93,23 @@ client.on("message", async (message) => {
   // Read the arguments of the command and separate them.
   let args = message.content.substring(globals.prefix.length).split(/\s+/);
 
-  // Loop through all comands to find the right one.
+  // If command exists
   if (client.commands.get(args[0])) {
-    client.commands.get(args[0]).execute(message);
+    client.commands.get(args[0]).execute(message); // execute it
   } else {
     // No command found.
     message.channel.send(strings.CMD_NOT_FOUND);
   }
 });
 
-//////////////////////////////
-//////////////////////////////
-
 // Checks time periodically.
 client.setInterval(() => {
-  // Get current time and date.
-  const date = new Date();
-
-  // First check MINUTES
-  if (date.getUTCMinutes() == globals.initial_minutes) {
-    // Rolls reset.
-    // Now check HOURS
-    for (i = globals.initial_hour; i < globals.hours_per_day; i += globals.claim_interval) {
-      if (date.getUTCHours() == i) {
-        ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length)]); // get random string
-        return;
-      }
-    }
-    // No claims, but still rolls
-    ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length)]); // get random string
-  }
+  let modules = client.modules.array();
+  modules.forEach(mod => {
+    if (mod.isActivated) mod.OnInterval();
+  });
 
 }, globals.time_check_interval);
 
-// Get users from DB and then send DM.
-async function ringAlarm(string) {
-  // get users from db.
-  const users = await userController.readAll();
-  // For each document in user database, fetch user from id and send a DM.
-  for (const doc of users) {
-    if (!doc.mudae_alarm) continue;
-    client.users.fetch(doc.user_id).then(user => {
-      user.send(doc.username + string).catch(err => {
-        console.log("No se ha podido enviar el PM\n" + err);
-      });
-    });
-  }
-}
 
 client.login(process.env.TOKEN);
