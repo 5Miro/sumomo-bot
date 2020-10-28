@@ -13,5 +13,5 @@ module.exports = {
     DIVORCE: ["eso fue rápido (စ_စ)", "puntitos wiii! (≧ ᗜ ≦)", "quizás Sumomo pueda claimearlo la proxima vez! (စ ද စ) "],
     SURPRISE: ["Qué pasó? Sumomo se perdió de algo??", "cómo? que pasó qué cosa??"],
     GIFT: ["Fue un regalo o un trade? (စ ද စ)", "Para Sumomo no hay nada? T_T"],
-    TRADE: ["Sumomo opina que fue un trato justo! (*‿*)", "Tradeo, tradeo!, - *silbatazos* -"],
+    TRADE: ["Sumomo opina que fue un trato justo! (^‿^)", "Tradeo, tradeo!, - *silbatazos* -"],
 }
