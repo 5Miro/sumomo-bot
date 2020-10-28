@@ -1,3 +1,6 @@
+const userController = require("../controllers/userController");
+const globals = require("../globals");
+
 module.exports = {
     name: "test",
     isActivated: false,
