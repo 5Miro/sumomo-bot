@@ -98,7 +98,7 @@ client.on("message", async (message) => {
     client.commands.get(args[0]).execute(message); // execute it
   } else {
     // No command found.
-    message.channel.send(strings.CMD_NOT_FOUND[Math.floor(Math.random() * strings.CMD_NOT_FOUND.length)]);
+    //message.channel.send(strings.CMD_NOT_FOUND[Math.floor(Math.random() * strings.CMD_NOT_FOUND.length)]);
   }
 });
 

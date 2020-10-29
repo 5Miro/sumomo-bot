@@ -6,5 +6,6 @@ module.exports = {
     claim_interval: 3, // in hours
     rolls_interval: 1, // in hours
     time_check_interval: 1000, // in miliseconds
-    hours_per_day: 24 // obviously
+    hours_per_day: 24, // obviously
+    good_morning_time: 9, // in hours, utc 
 }
