@@ -8,9 +8,14 @@ module.exports = {
     OnInterval() {
         // This function will be called periodically.
         const date = new Date();
-        if (date.getUTCHours() == globals.good_morning_time && date.getUTCMinutes == 0 && date.getUTCSeconds == 0) {
-            global.client.channels.fetch(process.env.good_morning_channel).send(strings.GOOD_MORNING);
-            global.client.channels.fetch(process.env.good_morning_channel).send(strings.GIFS.WAKEY_WAKEY);
+        if (date.getUTCHours() == globals.good_morning_time[0] && date.getUTCMinutes() == globals.good_morning_time[1] && date.getUTCSeconds() == globals.good_morning_time[2]) {
+            global.client.channels.fetch(process.env.GOOD_MORNING_CHANNEL).then(channel => {
+                channel.send(strings.GOOD_MORNING);
+                channel.send(strings.GIFS.WAKEY_WAKEY);
+            }).catch(err => {
+                console.log("wakeywakey threw an exception" + err);
+            })
+            
         }
     },
     OnMessage(message) {

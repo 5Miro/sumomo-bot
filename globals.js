@@ -7,5 +7,5 @@ module.exports = {
     rolls_interval: 1, // in hours
     time_check_interval: 1000, // in miliseconds
     hours_per_day: 24, // obviously
-    good_morning_time: 9, // in hours, utc 
+    good_morning_time: [9,0,0], //  HH,MM,SS in UTC 
 }

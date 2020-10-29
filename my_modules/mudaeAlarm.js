@@ -2,10 +2,6 @@ const globals = require("../globals");
 const userController = require("../controllers/userController");
 const strings = require("../strings");
 
-// Avoid ringing more than once.
-var rang = false;
-var ring_timeout = 90000;
-
 module.exports = {
     name: "mudaeAlarm",
     isActivated: true,
@@ -13,19 +9,10 @@ module.exports = {
         //////////////////////////////
         // MUDAE ALARM
         //////////////////////////////
-        // If already rang, return.
-        if (rang) return;
 
         // Get current time and date.
         const date = new Date();
-        if (date.getUTCMinutes() == globals.initial_minutes) {  // First check MINUTES
-
-            // Avoid ringing more than once.
-            rang = true;
-            setTimeout(function () {
-                rang = false;
-            }, ring_timeout);
-
+        if (date.getUTCMinutes() == globals.initial_minutes && date.getUTCSeconds() == 0) {  // First check MINUTES
             // Rolls reset.
             // Now check HOURS
             for (i = globals.initial_hour; i < globals.hours_per_day; i += globals.claim_interval) {
