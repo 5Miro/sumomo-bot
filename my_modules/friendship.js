@@ -12,6 +12,9 @@ const globals = require("../globals");
 const POSITIVE_KEY_WORDS = ["sumomo", "gracias", "de nada"];
 const DEFAULT_GAIN = 1;
 const BONUS_GAIN = 3;
+const LOSS_PER_INTERVAL = 1;
+const INTERVAL_HOURS = 3;
+const INITIAL_HOUR = 1;
 
 module.exports = {
     name: "friendship",
@@ -19,6 +22,17 @@ module.exports = {
     OnInterval() {
         // This function will be called periodically.
 
+        // Get current time and date.
+        const date = new Date();
+        if (date.getUTCMinutes() == 0 && date.getUTCSeconds() == 0) {  // First check MINUTES
+            // Now check HOURS
+            for (i = INITIAL_HOUR; i < globals.hours_per_day; i += INTERVAL_HOURS) {
+                if (date.getUTCHours() == i) {
+                    userController.updateFriendshipAll(LOSS_PER_INTERVAL);
+                    return;
+                }
+            }
+        }
     },
     OnMessage(message) {
         // If a message starts with the prefix

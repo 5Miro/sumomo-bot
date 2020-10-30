@@ -1,3 +1,4 @@
+const globals = require("../globals");
 const User = require("../models/userModel");
 
 exports.readUser = async (message) => {
@@ -45,17 +46,34 @@ exports.updateFriendship = async (message, value) => {
     return this.readUser(message).then(doc => {
         if (!doc) {
             // User does not exist, create one.
-            this.createUser(message).then(newUser => {
-                newUser.friendship += value;
-                return newUser.save();
+            this.createUser(message).then(user => {
+                if ((user.friendship + value >= globals.FS_MIN_VALUE) || (user.friendship + value <= globals.FS_MAX_VALUE)) {
+                    user.friendship += value;
+                    user.save();
+                }
             }).catch(err => {
                 console.log("updateFriendship threw an exception #2" + err);
             });
         } else {
-            doc.friendship += value;
-            return doc.save();
+            if ((doc.friendship + value >= globals.FS_MIN_VALUE) || (doc.friendship + value <= globals.FS_MAX_VALUE)) {
+                doc.friendship += value;
+                return doc.save();
+            }
         }
     }).catch(err => {
         console.log("updateFriendship threw an exception #1" + err);
     });
+}
+
+exports.updateFriendshipAll = async (value) => {
+    return this.readAll().then(users => {
+        users.forEach(user => {
+            if ((user.friendship + value >= globals.FS_MIN_VALUE) || (user.friendship + value <= globals.FS_MAX_VALUE)) {
+                user.friendship += value;
+                user.save();
+            }
+        });
+    }).catch(err => {
+        console.log("updateFriendshipAll threw an exception" + err);
+    })
 }

@@ -3,11 +3,11 @@ const globals = require("../globals");
 const strings = require("../strings");
 
 const CONVERSATIONS = [
-    { context: "marriage", input: /\bare now married\b/, output: strings.MARRIAGE, reaction: "🎉", gif: strings.GIFS.OMEDETOU },
-    { context: "divorce", input: /\bare now divorced\b/, output: strings.DIVORCE, reaction: "😱", gif: null},
-    { context: "surprise", input: /\bnooo+\b/, output: strings.SURPRISE, reaction: "😱", gif: strings.GIFS.SPINNING },
-    { context: "trade", input: /\bexchange is over\b/, output: strings.TRADE, reaction: "🤩", gif: null},
-    { context: "gift", input: /\bjust gifted\b/, output: strings.GIFT, reaction: "🥴", gif: null},
+    { context: "marriage", input: /\bare now married\b/, output: strings.MARRIAGE, reaction: "🎉", gif: strings.GIFS.DANCE },
+    { context: "divorce", input: /\bare now divorced\b/, output: strings.DIVORCE, reaction: "😱", gif: null },
+    { context: "surprise", input: /\bnooo+\b/, output: strings.SURPRISE, reaction: "😱", gif: null },
+    { context: "trade", input: /\bexchange is over\b/, output: strings.TRADE, reaction: "🤩", gif: null },
+    { context: "gift", input: /\bjust gifted\b/, output: strings.GIFT, reaction: "🥴", gif: null },
 ]
 
 module.exports = {
@@ -31,7 +31,7 @@ module.exports = {
                 message.react(element.reaction);
                 message.channel.send(element.output[Math.floor(Math.random() * element.output.length)]);
                 if (element.gif) {
-                    message.channel.send(element.gif);
+                    message.channel.send(element.gif[Math.floor(Math.random() * element.gif.length)]);
                 }
                 return;
             }
