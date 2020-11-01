@@ -50,7 +50,7 @@ module.exports = {
         var modifier = DEFAULT_GAIN;
 
         // If there's at least 1 positive key word.
-        if (POSITIVE_KEY_WORDS.some(word => message.content.includes(word.toLowerCase()))) {
+        if (POSITIVE_KEY_WORDS.some(word => message.content.toLowerCase().includes(word.toLowerCase()))) {
             modifier = BONUS_GAIN;
             message.react("❤");
         }
