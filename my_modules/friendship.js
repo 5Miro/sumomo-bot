@@ -10,7 +10,7 @@ const strings = require("../strings");
  * Gain or lose points depending on the content of the message.
  */
 
-const POSITIVE_KEY_WORDS = ["sumomo", "gracias", "de nada"];
+const POSITIVE_KEY_WORDS = ["sumomo", "gracias", "de nada", "buen dia", "buenos dias", "hola", "buenas noches"];
 const DEFAULT_GAIN = 1;
 const BONUS_GAIN = 3;
 const LOSS_PER_INTERVAL = 1;
