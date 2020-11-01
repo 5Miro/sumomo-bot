@@ -2,8 +2,9 @@ const userController = require("../controllers/userController");
 const globals = require("../globals");
 
 module.exports = {
-    name: "eraseDM",
+    name: "cleaning",
     isActivated: false,
+    descrip: "Borra los DMs de Sumomo de cada usuario",
     OnInterval() {
         // This function will be called periodically.
         userController.readAll().then(users => {
@@ -14,9 +15,10 @@ module.exports = {
                         dm.messages.fetch({ limit: 50 }).then(msgs => {
                             console.log(user.username + " quedan " + msgs.array().length);
                             msgs.array().forEach(element => {
-                                element.delete().catch(err => { });
+                                if (element.author.id == global.client.user.id) element.delete().catch(err => { });
                             });
                         }).catch(err => { });
+                        console.log("-----------------------------------------------------");
                     })
                 });
             }

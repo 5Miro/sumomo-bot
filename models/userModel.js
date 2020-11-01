@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const globals = require("../globals");
 
 const userSchema = new mongoose.Schema({
   user_id: {
@@ -16,8 +17,10 @@ const userSchema = new mongoose.Schema({
   },
   friendship: {
     type: Number,
-    default: 70,
+    default: globals.FS_DEFAULT_VALUE,
     required: false,
+    min: globals.FS_MIN_VALUE,
+    max: globals.FS_MAX_VALUE,
   }
 });
 

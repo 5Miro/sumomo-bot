@@ -18,9 +18,10 @@ module.exports = {
     // GIFS
     GIFS: {
         WAKEY_WAKEY: ["https://j.gifs.com/OM4lOp.gif", "https://j.gifs.com/nxKZj7.gif", "https://j.gifs.com/WL4nRx.gif"],
-        DANCE: ["https://tenor.com/view/sumomo-chobits-anime-wakey-wakey-plum-gif-15044233", "https://j.gifs.com/oVLREj.gif", "https://j.gifs.com/q7Njn0.gif", "https://j.gifs.com/xnXqZr.gif"],
-        SCARED: "https://j.gifs.com/2xV46K.gif",
-        INTENSE: "https://j.gifs.com/2xVRN1.gif",
-    }
+        DANCE: ["https://tenor.com/view/sumomo-chobits-anime-wakey-wakey-plum-gif-15044233", "https://j.gifs.com/q7Njn0.gif", "https://j.gifs.com/xnXqZr.gif"],
+        FRIENDSHIP: ["https://j.gifs.com/2xV46K.gif", "https://j.gifs.com/5QYLmZ.gif", "https://j.gifs.com/oVLyMN.gif", "https://j.gifs.com/2xVRN1.gif", "https://j.gifs.com/oVLREj.gif", "https://j.gifs.com/yoYX0w.gif"],
+    },
+
+    FRIENDSHIP: ["Da la impresión de que no le gustas.", "Aún no está acostumbrada a vos.", "Comienza a entrar en confianza ante tu presencia.", "Le gustas. Se la ve muy feliz!", "Confía plenamente en vos. Son inseparables!", "Te adora! No hay nada más que decir, qué maravilla."]
 
 }

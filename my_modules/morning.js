@@ -3,8 +3,9 @@ const globals = require("../globals");
 const strings = require("../strings");
 
 module.exports = {
-    name: "wakeywakey",
+    name: "morning",
     isActivated: true,
+    descrip: "Sumomo da los buenos días por un canal público",
     OnInterval() {
         // This function will be called periodically.
         const date = new Date();

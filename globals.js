@@ -12,4 +12,7 @@ module.exports = {
     // FRIENDSHIP
     FS_MIN_VALUE: 0,
     FS_MAX_VALUE: 255,
+    FS_DEFAULT_VALUE: 51,
+    //
+    MUDAE_PREFIX: "$",
 }

@@ -1,9 +1,10 @@
-const userController = require("../controllers/userController");
-const globals = require("../globals");
+const userController = require("./controllers/userController");
+const globals = require("./globals");
 
 module.exports = {
-    name: "test",
+    name: "TEST",
     isActivated: false,
+    descrip: "Módulo de prueba, no utilizar",
     OnInterval() {
         // This function will be called periodically.
 

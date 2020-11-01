@@ -47,33 +47,38 @@ exports.updateFriendship = async (message, value) => {
         if (!doc) {
             // User does not exist, create one.
             this.createUser(message).then(user => {
-                if ((user.friendship + value >= globals.FS_MIN_VALUE) || (user.friendship + value <= globals.FS_MAX_VALUE)) {
-                    user.friendship += value;
-                    user.save();
-                }
+                user.friendship += value;
+                user.save();
             }).catch(err => {
                 console.log("updateFriendship threw an exception #2" + err);
             });
         } else {
-            if ((doc.friendship + value >= globals.FS_MIN_VALUE) || (doc.friendship + value <= globals.FS_MAX_VALUE)) {
-                doc.friendship += value;
-                return doc.save();
-            }
+            doc.friendship += value;
+            return doc.save();
         }
     }).catch(err => {
-        console.log("updateFriendship threw an exception #1" + err);
+        //console.log("updateFriendship threw an exception #1" + err);
     });
 }
 
 exports.updateFriendshipAll = async (value) => {
     return this.readAll().then(users => {
         users.forEach(user => {
-            if ((user.friendship + value >= globals.FS_MIN_VALUE) || (user.friendship + value <= globals.FS_MAX_VALUE)) {
-                user.friendship += value;
-                user.save();
-            }
+            user.friendship += value;
+            user.save();
         });
     }).catch(err => {
         console.log("updateFriendshipAll threw an exception" + err);
+    })
+}
+
+exports.setFriendshipAll = async (value) => {
+    return this.readAll().then(users => {
+        users.forEach(user => {
+            user.friendship = value;
+            user.save();
+        });
+    }).catch(err => {
+        console.log("setFriendshipAll threw an exception" + err);
     })
 }

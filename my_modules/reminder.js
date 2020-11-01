@@ -3,8 +3,9 @@ const userController = require("../controllers/userController");
 const strings = require("../strings");
 
 module.exports = {
-    name: "mudaeAlarm",
+    name: "reminder",
     isActivated: true,
+    descrip: "Sumomo envía DMs recordando sobre los resets de Mudae",
     OnInterval() {
         //////////////////////////////
         // MUDAE ALARM
