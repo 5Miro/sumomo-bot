@@ -47,14 +47,19 @@ exports.updateFriendship = async (message, value) => {
         if (!doc) {
             // User does not exist, create one.
             this.createUser(message).then(user => {
+                user.fs_quota += value;
                 user.friendship += value;
                 user.save();
             }).catch(err => {
                 console.log("updateFriendship threw an exception #2" + err);
             });
         } else {
-            doc.friendship += value;
-            return doc.save();
+            if (doc.fs_quota < globals.FS_MAX_QUOTA) {
+                doc.fs_quota += value;
+                doc.friendship += value + (doc.fs_quota - globals.FS_MAX_QUOTA);
+                return doc.save();
+            }
+            return doc;
         }
     }).catch(err => {
         //console.log("updateFriendship threw an exception #1" + err);
@@ -64,6 +69,7 @@ exports.updateFriendship = async (message, value) => {
 exports.updateFriendshipAll = async (value) => {
     return this.readAll().then(users => {
         users.forEach(user => {
+            user.fs_quota = 0;
             user.friendship += value;
             user.save();
         });
@@ -75,6 +81,7 @@ exports.updateFriendshipAll = async (value) => {
 exports.setFriendshipAll = async (value) => {
     return this.readAll().then(users => {
         users.forEach(user => {
+            user.fs_quota = 0;
             user.friendship = value;
             user.save();
         });

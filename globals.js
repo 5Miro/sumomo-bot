@@ -13,6 +13,8 @@ module.exports = {
     FS_MIN_VALUE: 0,
     FS_MAX_VALUE: 255,
     FS_DEFAULT_VALUE: 51,
+    FS_MAX_QUOTA: 10,
+    FS_QUOTA_INTERVAL: 1,
     //
     MUDAE_PREFIX: "$",
 }

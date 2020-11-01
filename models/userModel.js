@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     required: false,
     min: globals.FS_MIN_VALUE,
     max: globals.FS_MAX_VALUE,
+  },
+  fs_quota: {
+    type: Number,
+    default: 0,
   }
 });
 
