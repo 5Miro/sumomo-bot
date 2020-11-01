@@ -56,7 +56,7 @@ exports.updateFriendship = async (message, value) => {
         } else {
             if (doc.fs_quota < globals.FS_MAX_QUOTA) {
                 doc.fs_quota += value;
-                doc.friendship += value + (doc.fs_quota - globals.FS_MAX_QUOTA);
+                doc.friendship += value;
                 return doc.save();
             }
             return doc;
