@@ -13,7 +13,7 @@ const strings = require("../strings");
 const POSITIVE_KEY_WORDS = ["sumomo", "gracias", "de nada", "buen dia", "buenos dias", "hola", "buenas noches", "te quiero"];
 const DEFAULT_GAIN = 1;
 const BONUS_GAIN = 3;
-const JOIN_VOICE_GAIN = 5;
+const JOIN_VOICE_GAIN = 6;
 const LOSS_PER_INTERVAL = -1;
 const INTERVAL_HOURS = 1;
 const INITIAL_HOUR = 1;
@@ -62,16 +62,13 @@ module.exports = {
     OnVoiceStateUpdate(oldState, newState) {
         // if user just connected from a voice channel.
         if (oldState.channel === null && newState.channel !== null) {
-            // Gain friendship points.
-            userController.updateFriendship(newState.member.user.id, newState.member.user.username, JOIN_VOICE_GAIN);
-
-            // If FS is above a certain threshold, say hello to user.
+            // If FS is above a certain threshold, say hello to user. Only say hello if you can gain points, to avoid spam.
             userController.readUser(newState.member.user.id).then(doc => {
-                if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH]) {
+                if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH] && doc.fs_quota < globals.FS_MAX_QUOTA) {
                     client.users.fetch(doc.user_id).then(user => {
                         user.send(doc.username + strings.HELLO[Math.floor(Math.random() * strings.HELLO.length)]).then(msg => {
                             // Delete message after timeout.
-                            msg.delete({ timeout: globals.rolls_interval * 60 * 60 * 1000 }).catch(err => { // timeout is equal to rolls time interval in miliseconds.
+                            msg.delete({ timeout: 60 * 1000 }).catch(err => {
                                 console.log("No se ha podido borrar el mensaje.");
                             });
                         }).catch(err => {
@@ -81,7 +78,8 @@ module.exports = {
                 }
             })
 
-
+            // Gain friendship points.
+            userController.updateFriendship(newState.member.user.id, newState.member.user.username, JOIN_VOICE_GAIN);
         }
     },
 
