@@ -4,7 +4,7 @@ const globals = require("../globals");
 module.exports = {
     name: "cleaning",
     isActivated: false,
-    descrip: "Borra los DMs de Sumomo de cada usuario",
+    descrip: "Limpia los DMs de Sumomo que no se borraron",
     OnInterval() {
         // This function will be called periodically.
         userController.readAll().then(users => {
@@ -27,5 +27,8 @@ module.exports = {
     },
     OnMessage(message) {
         // This function will be called when a message is read.
+    },
+    OnVoiceStateUpdate(oldState, newState) {
+
     }
 }

@@ -21,5 +21,8 @@ module.exports = {
     },
     OnMessage(message) {
         // This function will be called when a message is read.
+    },
+    OnVoiceStateUpdate(oldState, newState) {
+
     }
 }

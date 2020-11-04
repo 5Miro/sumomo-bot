@@ -1,8 +1,8 @@
 const globals = require("../globals");
 const User = require("../models/userModel");
 
-exports.readUser = async (message) => {
-    const doc = await User.findOne({ user_id: message.author.id }).catch(err => {
+exports.readUser = async (_id) => {
+    const doc = await User.findOne({ user_id: _id }).catch(err => {
         console.log("User does not exist." + err);
         return null;
     });
@@ -13,21 +13,21 @@ exports.readAll = async () => {
     return await User.find();
 }
 
-exports.createUser = async (message) => {
+exports.createUser = async (_id, _username) => {
     const newUser = new User({
-        user_id: message.author.id,
-        username: message.author.username,
+        user_id: _id,
+        username: _username,
     });
     return await newUser.save().catch(err => {
         console.log("No se ha podido crear el usuario." + err);
     })
 }
 
-exports.toggleAlarm = async (message) => {
-    return this.readUser(message).then(doc => {
+exports.toggleAlarm = async (_id, _username) => {
+    return this.readUser(_id).then(doc => {
         if (!doc) {
             // User does not exist, create one.
-            return this.createUser(message).then(newUser => {
+            return this.createUser(_id, _username).then(newUser => {
                 newUser.mudae_alarm = true;
                 return newUser.save();
             }).catch(err => {
@@ -42,22 +42,31 @@ exports.toggleAlarm = async (message) => {
     });
 }
 
-exports.updateFriendship = async (message, value) => {
-    return this.readUser(message).then(doc => {
+exports.updateFriendship = async (_id, _username, _value) => {
+    return this.readUser(_id).then(doc => {
         if (!doc) {
             // User does not exist, create one.
-            this.createUser(message).then(user => {
-                user.fs_quota += value;
-                user.friendship += value;
+            this.createUser(_id, _username).then(user => {
+                user.fs_quota += _value;
+                user.friendship += _value;
                 user.save();
             }).catch(err => {
                 console.log("updateFriendship threw an exception #2" + err);
             });
         } else {
+            // if fs quota is not full
             if (doc.fs_quota < globals.FS_MAX_QUOTA) {
-                doc.fs_quota += value;
-                doc.friendship += value;
-                return doc.save();
+                // if value would not exceed quota
+                if (doc.fs_quota + _value <= globals.FS_MAX_QUOTA) {
+                    doc.fs_quota += _value;
+                    doc.friendship += _value;
+                    return doc.save();
+                } else {
+                    // if value would exceed quota, add remaining fs points to reach max quota
+                    doc.friendship += globals.FS_MAX_QUOTA - doc.fs_quota;
+                    doc.fs_quota = globals.FS_MAX_QUOTA;
+                    return doc.save();
+                }
             }
             return doc;
         }
@@ -66,11 +75,15 @@ exports.updateFriendship = async (message, value) => {
     });
 }
 
-exports.updateFriendshipAll = async (value) => {
+exports.updateFriendshipAll = async (_value, reset_quota) => {
     return this.readAll().then(users => {
         users.forEach(user => {
-            user.fs_quota = 0;
-            user.friendship += value;
+            if (reset_quota) {
+                user.fs_quota = 0;
+            } else {
+                user.fs_quota += _value;
+            }
+            user.friendship += _value;
             user.save();
         });
     }).catch(err => {
@@ -78,11 +91,11 @@ exports.updateFriendshipAll = async (value) => {
     })
 }
 
-exports.setFriendshipAll = async (value) => {
+exports.setFriendshipAll = async (_value) => {
     return this.readAll().then(users => {
         users.forEach(user => {
             user.fs_quota = 0;
-            user.friendship = value;
+            user.friendship = _value;
             user.save();
         });
     }).catch(err => {

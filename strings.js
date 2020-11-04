@@ -14,6 +14,7 @@ module.exports = {
     TRADE: ["Opino que fue un trato justo! (^ᗜ^)", "Tradeo, tradeo!, - *silbatazos* -"],
     ABOUT: ["Estoy programada para bailar y cantar!!! (・ω・)", "Sabias que mido 16 centímetros? (︶ω︶)"],
     GOOD_MORNING: "*silbatazo* - Ohayou gozaimasu!, hagamos ejercicios matutinos para comenzar el día con energías!",
+    HELLO: ["-sama! okaeri! okaeri! ٩(•ᗜ•)٩ - *panderetazos* -", "-sama, por qué no hacemos ejercicio juntos hoy? (ง '̀͜ '́ )ง", "-sama volvió! es hora de bailar y cantar! ᕙ(`▽´)ᕗ", "-sama, sabía que mido 16 centímetros? (•ᗜ•)ﾉ", "-sama! para empezar un buen día hay que mover el esqueleto! (•ᗜ•)ﾉ"],
 
     // GIFS
     GIFS: {

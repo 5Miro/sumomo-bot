@@ -76,6 +76,19 @@ client.on("ready", () => {
 //////////////////////////////
 //////////////////////////////
 
+client.on("voiceStateUpdate", (oldState, newState) => {
+  if (oldState.member.user.bot) return; // if user is a bot, return.
+  // Call OnVoiceStateUpdate functions from modules.
+  let modules = client.modules.array();
+  modules.forEach(mod => {
+    if (mod.isActivated && mod.OnVoiceStateUpdate !== null) mod.OnVoiceStateUpdate(oldState, newState); // if mod is activated, call function
+  });
+});
+
+//////////////////////////////
+//////////////////////////////
+
+
 // Function to read messages.
 client.on("message", async (message) => {
   // Call OnMessage functions from modules.

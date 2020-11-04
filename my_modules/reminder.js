@@ -31,6 +31,9 @@ module.exports = {
     },
     OnMessage(message) {
 
+    },
+    OnVoiceStateUpdate(oldState, newState) {
+
     }
 }
 

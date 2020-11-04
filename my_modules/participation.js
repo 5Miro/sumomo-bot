@@ -37,5 +37,8 @@ module.exports = {
                 return;
             }
         });
+    },
+    OnVoiceStateUpdate(oldState, newState) {
+
     }
 }
