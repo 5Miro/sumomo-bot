@@ -1,33 +1,66 @@
 const globals = require("../globals");
 const User = require("../models/userModel");
 
-exports.readUser = async (_id) => {
-    const doc = await User.findOne({ user_id: _id }).catch(err => {
+/**
+ * Reads a user from the database and returns the document.
+ * @param {Discord ID of user} _id 
+ */
+exports.readUser = async (_id, _guild_id) => {
+    const doc = await User.findOne({ user_id: _id, guild_id: _guild_id }).catch(err => {
         console.log("User does not exist." + err);
         return null;
     });
     return doc;
 }
 
+/**
+ * Reads all users from the database and returns the documents.
+ * @param {Discord ID of user} _id 
+ */
 exports.readAll = async () => {
-    return await User.find();
+    return await User.find().catch(err => {
+        console.log("User does not exist." + err);
+        return null;
+    });;
 }
 
-exports.createUser = async (_id, _username) => {
+/**
+ * Reads all users from a certain guild from the database and returns the documents.
+ * @param {Discord ID of user} _id 
+ */
+exports.readAllFromGuild = async (_guild_id) => {
+    return await User.find({ guild_id: _guild_id }).catch(err => {
+        console.log("User does not exist." + err);
+        return null;
+    });;
+}
+
+/**
+ * Creates a new User document and saves it into the database.
+ * @param {Discord ID of user} _id 
+ * @param {Username of user} _username 
+ */
+exports.createUser = async (_id, _username, _guild_id) => {
     const newUser = new User({
         user_id: _id,
         username: _username,
+        guild_id: _guild_id,
     });
     return await newUser.save().catch(err => {
         console.log("No se ha podido crear el usuario." + err);
     })
 }
 
-exports.toggleAlarm = async (_id, _username) => {
-    return this.readUser(_id).then(doc => {
+/**
+ * Toggles the Mudae alarm of user.
+ * @param {Discord ID of user} _id 
+ * @param {Discord username of user} _username 
+ */
+exports.toggleAlarm = async (_id, _username, _guild_id) => {
+    return this.readUser(_id, _guild_id).then(doc => {
         if (!doc) {
             // User does not exist, create one.
-            return this.createUser(_id, _username).then(newUser => {
+            return this.createUser(_id, _username, _guild_id).then(newUser => {
                 newUser.mudae_alarm = true;
                 return newUser.save();
             }).catch(err => {
@@ -42,11 +75,17 @@ exports.toggleAlarm = async (_id, _username) => {
     });
 }
 
-exports.updateFriendship = async (_id, _username, _value) => {
-    return this.readUser(_id).then(doc => {
+/**
+ * Updates FS value of a single user.
+ * @param {Discord id of user} _id 
+ * @param {Discord username of user} _username 
+ * @param {+ or - variation in friendship} _value 
+ */
+exports.updateFriendship = async (_id, _username, _guild_id, _value) => {
+    return this.readUser(_id, _guild_id).then(doc => {
         if (!doc) {
             // User does not exist, create one.
-            this.createUser(_id, _username).then(user => {
+            this.createUser(_id, _username, _guild_id).then(user => {
                 user.fs_quota += _value;
                 user.friendship += _value;
                 user.save();
@@ -75,6 +114,11 @@ exports.updateFriendship = async (_id, _username, _value) => {
     });
 }
 
+/**
+ * Updates friendship to all users at once.
+ * @param {+ or - variation in friendship} _value 
+ * @param {whether it should reset the quota or not} reset_quota 
+ */
 exports.updateFriendshipAll = async (_value, reset_quota) => {
     return this.readAll().then(users => {
         users.forEach(user => {
@@ -91,8 +135,12 @@ exports.updateFriendshipAll = async (_value, reset_quota) => {
     })
 }
 
-exports.setFriendshipAll = async (_value) => {
-    return this.readAll().then(users => {
+/**
+ * Sets the friendship of all users to a determinated value.
+ * @param {New value for everyone} _value 
+ */
+exports.setFriendshipAll = async (_value, _guild_id) => {
+    return this.readAllFromGuild(_guild_id).then(users => {
         users.forEach(user => {
             user.fs_quota = 0;
             user.friendship = _value;

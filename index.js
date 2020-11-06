@@ -27,9 +27,15 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const globals = require("./globals");
 const strings = require("./strings");
+const guildController = require("./controllers/guildController");
 
 const client = new Discord.Client(); // This client.
 global.client = client;
+
+//////////////////////////////
+//////////////////////////////
+
+client.servers = new Discord.Collection(); // A map that stores servers's settings. They key that identifies the server is the guild ID
 
 //////////////////////////////
 //////////////////////////////
@@ -71,7 +77,29 @@ client.once("ready", () => {
 
 client.on("ready", () => {
   client.user.setActivity(globals.prefix + "help", { type: "PLAYING" });
+
+  // Get all servers data from DB.
+  guildController.readAll().then(docs => {
+    docs.forEach(doc => {
+      client.servers.set(doc.guild_id, doc);
+    });
+  });
 });
+
+// Bot joined a new server.
+client.on("guildCreate", guild => {
+  console.log("Joined a new guild: " + guild.name);
+  guildController.createGuild(guild).then(doc => {
+    client.servers.set(guild.id, doc);
+  });
+})
+
+// Bot left a server.
+client.on("guildDelete", guild => {
+  console.log("Left a guild: " + guild.name);
+  guildController.deleteGuild(guild.id);
+  servers.delete(guild.id);
+})
 
 //////////////////////////////
 //////////////////////////////

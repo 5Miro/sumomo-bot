@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  guild_id: {
+    type: String,
+    required: true,
+  },
   mudae_alarm: {
     type: Boolean,
     default: false,

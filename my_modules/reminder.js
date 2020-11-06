@@ -13,19 +13,25 @@ module.exports = {
 
         // Get current time and date.
         const date = new Date();
-        if (date.getUTCMinutes() == globals.initial_minutes && date.getUTCSeconds() == 0) {  // First check MINUTES
-            // Rolls reset.
-            // Now check HOURS
-            for (i = globals.initial_hour; i < globals.hours_per_day; i += globals.claim_interval) {
-                if (date.getUTCHours() == i) {
-                    ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length)]); // get random string
-                    return;
-                }
-            }
-            // No claims, but still rolls
-            ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length)]); // get random string
 
-        }
+        let guilds = global.client.servers.array();
+        guilds.forEach(guild => {
+            if (date.getUTCMinutes() == guild.mudae.initial_minutes && date.getUTCSeconds() == 0) {  // First check MINUTES
+                // Rolls reset.
+                // Now check HOURS
+                for (i = guild.mudae.initial_hour; i < globals.hours_per_day; i += guild.mudae.claim_interval) {
+                    if (date.getUTCHours() == i) {
+                        ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length)]); // get random string
+                        return;
+                    }
+                }
+                // No claims, but still rolls
+                ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length)]); // get random string
+
+            }
+        })
+
+
         //////////////////////////////
         //////////////////////////////
     },
@@ -38,7 +44,7 @@ module.exports = {
 }
 
 // Get users from DB and then send DM.
-async function ringAlarm(string) {
+async function ringAlarm(string, guild_id) {
     // get users from db.
     const users = await userController.readAll();
     // For each document in user database, fetch user from id and send a DM.
