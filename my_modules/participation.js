@@ -8,7 +8,7 @@ const CONVERSATIONS = [
     { context: "surprise", input: /\bnooo+\b/, output: strings.SURPRISE, reaction: "😱", gif: null },
     { context: "trade", input: /(\bexchange is over\b)|(\b(given to)\b)/, output: strings.TRADE, reaction: "🤩", gif: null },
     { context: "gift", input: /(\b(just gifted)\b)/, output: strings.GIFT, reaction: "🥴", gif: null },
-    { context: "monokuma", input: /(\b(Monokuma)\b)/, output: strings.MONOKUMA, reaction: "😟", gif: null },
+    { context: "monokuma", input: /\bmonokuma\b/, output: strings.MONOKUMA, reaction: "😟", gif: null },
 ]
 
 module.exports = {

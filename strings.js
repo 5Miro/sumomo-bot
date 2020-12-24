@@ -15,7 +15,8 @@ module.exports = {
     ABOUT: ["Estoy programada para bailar y cantar!!! (・ω・)", "Sabias que mido 16 centímetros? (︶ω︶)"],
     GOOD_MORNING: "*silbatazo* - Ohayou gozaimasu!, hagamos ejercicios matutinos para comenzar el día con energías!",
     HELLO: ["-sama! okaeri! okaeri! ٩(•ᗜ•)٩ - *panderetazos* -", "-sama, por qué no hacemos ejercicio juntos hoy? (ง '̀͜ '́ )ง", "-sama volvió! es hora de bailar y cantar! ᕙ(`▽´)ᕗ", "-sama, sabía que mido 16 centímetros? (•ᗜ•)ﾉ", "-sama! para empezar un buen día hay que mover el esqueleto! (•ᗜ•)ﾉ"],
-    MONOKUMA: ["@Miro -sama... Sumomo se siente extraña. Creo que algo accedió a mis módulos de funcionamiento. ミ●﹏☉ミ"],
+    MONOKUMA: ["Miro-sama... Sumomo se siente extraña. Creo que algo accedió a mis módulos de funcionamiento. ミ●﹏☉ミ"],
+
     // GIFS
     GIFS: {
         WAKEY_WAKEY: ["https://j.gifs.com/OM4lOp.gif", "https://j.gifs.com/nxKZj7.gif", "https://j.gifs.com/WL4nRx.gif"],

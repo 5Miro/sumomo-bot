@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const globals = require("../globals");
-const { isActivated } = require("../my_modules/killingGame.");
+const killingGame = require("../my_modules/killingGame");
 
 const rules = [
     { number: 1, descrip: "- Todos comienzan con 7 puntos." },
@@ -16,14 +16,14 @@ module.exports = {
     descrip: "Muestra las reglas del evento de Monokuma",
     hidden: false,
     execute(message) {
-        if (!isActivated) return;
+        if (!killingGame.isActivated) return;
         const embed = new Discord.MessageEmbed()
             .setAuthor("by Monokuma")
             .setTitle("Reglas del juego:")
             .setColor("#ff0000");
 
         rules.forEach(rule => {
-            embed.addFields({ name: rules.number, value: rules.descrip, inline: false });
+            embed.addFields({ name: rule.number, value: rule.descrip, inline: false });
         });
         embed
             .addFields({ name: "\u200B", value: "\u200B" })
