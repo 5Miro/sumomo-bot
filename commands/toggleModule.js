@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const globals = require("../globals");
 
 module.exports = {
-    name: "set",
+    name: "toggleModule",
     descrip: "(ADMIN) Activa o desactiva módulos de función.",
     hidden: false,
     execute(message) {
