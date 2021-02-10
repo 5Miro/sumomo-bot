@@ -1,16 +1,16 @@
 {
-  "name": "mudae-alarm-bot",
-  "version": "1.0.0",
-  "description": "Alarm bot for Mudae from discord.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Miro",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^12.4.0",
-    "dotenv": "^8.2.0",
-    "mongoose": "^5.10.10"
-  }
+	"name": "mudae-alarm-bot",
+	"version": "1.0.0",
+	"description": "Alarm bot for Mudae from discord.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Miro",
+	"license": "ISC",
+	"dependencies": {
+		"discord.js": "^12.5.1",
+		"dotenv": "^8.2.0",
+		"mongoose": "^5.11.15"
+	}
 }

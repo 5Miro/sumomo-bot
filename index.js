@@ -119,16 +119,20 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 
 // Function to read messages.
 client.on("message", async (message) => {
+
   // Call OnMessage functions from modules.
   let modules = client.modules.array();
   modules.forEach(mod => {
     if (mod.isActivated) mod.OnMessage(message); // if mod is activated, call function
   });
 
-  // If message comes from bot, return;
+  /**
+   * Check if message is a command for this bot.
+   */
+  // If message comes from any bot, return;
   if (message.author.bot) return;
 
-  // If a message does not start with the prefix
+  // If a message does not start with the prefix, return.
   if (!message.content.startsWith(globals.prefix)) return;
 
   // Read the arguments of the command and separate them.
@@ -143,7 +147,7 @@ client.on("message", async (message) => {
   }
 });
 
-// Checks time periodically.
+// Checks time periodically and call OnInterval functions from each module.
 client.setInterval(() => {
   let modules = client.modules.array();
   modules.forEach(mod => {
@@ -153,4 +157,5 @@ client.setInterval(() => {
 }, globals.time_check_interval);
 
 
+// Log in this bot.
 client.login(process.env.TOKEN);
