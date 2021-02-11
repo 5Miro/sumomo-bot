@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const { findGuildAndUpdate, readGuild } = require("../controllers/guildController");
 module.exports = {
     name: "setPrefix",
-    descrip: "Cambia el prefijo para comandos de Sumomo.",
+    descrip: "(ADMIN) Cambia el prefijo para comandos de Sumomo.",
     hidden: false,
     execute(message) {
         // User must be an admin.

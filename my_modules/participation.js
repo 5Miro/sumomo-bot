@@ -7,13 +7,12 @@ const CONVERSATIONS = [
     { context: "surprise", input: /\bnooo+\b/, output: strings.SURPRISE, reaction: "😱", gif: null },
     { context: "trade", input: /(\bexchange is over\b)|(\b(given to)\b)/, output: strings.TRADE, reaction: "🤩", gif: null },
     { context: "gift", input: /(\b(just gifted)\b)/, output: strings.GIFT, reaction: "🥴", gif: null },
-    { context: "monokuma", input: /\bmonokuma\b/, output: strings.MONOKUMA, reaction: "😟", gif: null },
 ]
 
 module.exports = {
     name: "participation",
     isActivated: true,
-    descrip: "Sumomo participa de las conversaciones entre usuarios con mensajes y reacciones.",
+    descrip: "Sumomo participa de conversaciones con mensajes y reacciones.",
     OnInterval() {
         // This function will be called periodically.
 

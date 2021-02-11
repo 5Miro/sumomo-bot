@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const { readGuild } = require("../controllers/guildController");
 module.exports = {
     name: "setMudae",
-    descrip: "Cambia la configuración de la alarma de Mudae.",
+    descrip: "(ADMIN) Cambia la configuración de la alarma de Mudae.",
     hidden: false,
     execute(message) {
         // User must be an admin.
