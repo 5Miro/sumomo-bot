@@ -1,19 +1,20 @@
 const Discord = require("discord.js");
 const globals = require("../globals");
+const { getCurrentServer } = require("../utils");
 
 module.exports = {
     name: "toggleModule",
-    descrip: "(ADMIN) Activa o desactiva módulos de función.",
-    hidden: false,
+    descrip: "(OWNER) Activa o desactiva módulos de función.",
+    hidden: true,
     execute(message) {
         // User must be an admin.
-        if (!message.member.hasPermission("ADMINISTRATOR")) {
+        if (!message.member.id === process.env.MASTER_ID) {
             message.channel.send(message.author.username + "-sama, no tiene permisos para ejecutar ese comando.");
             return;
         }
 
         // Read the arguments of the command and separate them.
-        let args = message.content.substring(globals.prefix.length).split(/\s+/);
+        let args = message.content.substring(getCurrentServer(message.guild.id).config.prefix.length).split(/\s+/);
 
         // Get module from map and change the activation state.
         if (global.client.modules.get(args[1])) {

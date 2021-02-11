@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const globals = require("../globals");
+const { getCurrentServer } = require("../utils");
 
 module.exports = {
     name: "help",
@@ -15,7 +16,7 @@ module.exports = {
 
         let commands = message.client.commands.array();
         commands.forEach(cmd => {
-            embed.addFields({ name: globals.prefix + cmd.name, value: cmd.descrip, inline: false });
+            embed.addFields({ name: getCurrentServer(message.guild.id).config.prefix + cmd.name, value: cmd.descrip, inline: false });
         });
         embed
             .addFields({ name: "\u200B", value: "\u200B" })

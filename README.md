@@ -39,13 +39,16 @@ Sumomo **does not** store any other kind of personal information about the user.
 Understand that Sumomo works **through** the Discord API.
 
 Sumomo is **NOT** a public bot. Sumomo was built for personal use only. That
-means that whoever uses Sumomo's source code must provide **their own** app and database hosting.
+means that whoever uses Sumomo's source code must provide **their own** app and
+database hosting.
 
 **3- Modular behaviour**
 
-Sumomo is a modular-based bot. Each module adds a new functionality through .js file contained in the "modules" folder. Said file has the following structure:
+Sumomo is a modular-based bot. Each module adds a new functionality through .js
+file contained in the "modules" folder. Said file has the following structure:
 
 // exampleModule.js
+
 ```
 module.exports  =  {
 
@@ -74,7 +77,6 @@ module.exports  =  {
 
 - |help
   > Shows information and commands.
-  > 
 - |modules
   > Lists every module and their state.
 - |toggleModule (moduleName)
@@ -82,9 +84,11 @@ module.exports  =  {
 
 **5- Custom commands**
 
-You can add custom commands in the "commands" folder. These .js files have the following structure:
+You can add custom commands in the "commands" folder. These .js files have the
+following structure:
 
 // exampleCommand.js
+
 ```
 module.exports  =  {
 

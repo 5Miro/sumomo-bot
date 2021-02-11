@@ -1,6 +1,7 @@
 const userController = require("../controllers/userController");
 const globals = require("../globals");
 const strings = require("../strings");
+const { getCurrentServer } = require("../utils");
 
 /**
  * How does friendship work? Well, similar to Pokemon games.
@@ -15,7 +16,7 @@ const DEFAULT_GAIN = 1;
 const BONUS_GAIN = 3;
 const JOIN_VOICE_GAIN = 6;
 const LOSS_PER_INTERVAL = -1;
-const INTERVAL_HOURS = 1;
+const INTERVAL_HOURS = 3;
 const INITIAL_HOUR = 1;
 const THRESHOLDS = [-1, 50, 100, 150, 200, 240, 255];
 const ON_CONNECTION_GREET_INDEX_TH = 3;
@@ -42,11 +43,14 @@ module.exports = {
     OnMessage(message) {
         // This function will be called when a message is read.
 
-        // If a message starts with the prefix
-        if (message.content.startsWith(globals.prefix) || message.content.startsWith(globals.MUDAE_PREFIX)) return;
+        // If user is bot or system, return
+        if (message.author.bot || message.system) return;
 
-        // If user is bot, return
-        if (message.author.bot) return;
+        // If message comes from a guild that hasn't been registered yet.
+        if (getCurrentServer(message.guild.id) === undefined) return;
+
+        // If a message starts with the prefix
+        if (message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
 
         // By default
         var modifier = DEFAULT_GAIN;
@@ -56,7 +60,7 @@ module.exports = {
             modifier = BONUS_GAIN;
             message.react("❤");
         }
-        userController.updateFriendship(message.author.id, message.author.username, modifier);
+        userController.updateFriendship(message.author.id, message.author.username, message.guild.id, modifier);
     },
 
     OnVoiceStateUpdate(oldState, newState) {
@@ -64,6 +68,7 @@ module.exports = {
         if (oldState.channel === null && newState.channel !== null) {
             // If FS is above a certain threshold, say hello to user. Only say hello if you can gain points, to avoid spam.
             userController.readUser(newState.member.user.id).then(doc => {
+                if (!doc) return;
                 if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH] && doc.fs_quota < globals.FS_MAX_QUOTA) {
                     client.users.fetch(doc.user_id).then(user => {
                         user.send(doc.username + strings.HELLO[Math.floor(Math.random() * strings.HELLO.length)]).then(msg => {
@@ -79,12 +84,12 @@ module.exports = {
             })
 
             // Gain friendship points.
-            userController.updateFriendship(newState.member.user.id, newState.member.user.username, JOIN_VOICE_GAIN);
+            userController.updateFriendship(newState.member.user.id, newState.member.user.username, newState.guild.id, JOIN_VOICE_GAIN);
         }
     },
 
     GetFriendship(message) {
-        userController.readUser(message.author.id).then(user => {
+        userController.readUser(message.author.id, message.guild.id).then(user => {
             if (user) {
                 for (let i = 0; i < THRESHOLDS.length - 1; i++) {
                     if (user.friendship > THRESHOLDS[i] && user.friendship <= THRESHOLDS[i + 1]) {
@@ -93,7 +98,7 @@ module.exports = {
                     }
                 }
             } else {
-                userController.createUser(message.author.id, message.author.username).then(newUser => {
+                userController.createUser(message.author.id, message.author.username, message.guild.id).then(newUser => {
                     for (let i = 0; i < THRESHOLDS.length - 1; i++) {
                         if (newUser.friendship > THRESHOLDS[i] && newUser.friendship <= THRESHOLDS[i + 1]) {
                             message.channel.send("Tu amistad con Sumomo es del " + Math.round(newUser.friendship / globals.FS_MAX_VALUE * 100) + "%. " + strings.FRIENDSHIP[i]);
