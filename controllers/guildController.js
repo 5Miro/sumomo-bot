@@ -10,6 +10,18 @@ exports.readAll = async () => {
 }
 
 /**
+ * Reads a guild from the database with a certain guild id.
+ * @param {Discord ID of guild} _id 
+ */
+exports.readGuild = async (_guild_id) => {
+    return Guild.findOne({ guild_id: _guild_id });
+}
+
+exports.findGuildAndUpdate = async (_guild_id, _update) => {
+    return Guild.findOneAndUpdate({ guild_id: _guild_id }, _update, { new: true });
+}
+
+/**
  * Creates a new Guild document and saves it into the database.
  * @param {Discord ID of user} _id 
  * @param {Username of user} _username 

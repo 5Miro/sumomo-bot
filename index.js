@@ -28,6 +28,7 @@ const fs = require("fs");
 const globals = require("./globals");
 const strings = require("./strings");
 const guildController = require("./controllers/guildController");
+const { getCurrentServer } = require("./utils");
 
 const client = new Discord.Client(); // This client.
 global.client = client;
@@ -76,7 +77,7 @@ client.once("ready", () => {
 });
 
 client.on("ready", () => {
-  client.user.setActivity(globals.prefix + "help", { type: "PLAYING" });
+  client.user.setActivity("|help", { type: "PLAYING" });
 
   // Get all servers data from DB.
   guildController.readAll().then(docs => {
@@ -98,7 +99,7 @@ client.on("guildCreate", guild => {
 client.on("guildDelete", guild => {
   console.log("Left a guild: " + guild.name);
   guildController.deleteGuild(guild.id);
-  servers.delete(guild.id);
+  client.servers.delete(guild.id);
 })
 
 //////////////////////////////
@@ -129,14 +130,14 @@ client.on("message", async (message) => {
   /**
    * Check if message is a command for this bot.
    */
-  // If message comes from any bot, return;
-  if (message.author.bot) return;
+  // If message comes from any bot or from system, return;
+  if (message.author.bot || message.system) return;
 
   // If a message does not start with the prefix, return.
-  if (!message.content.startsWith(globals.prefix)) return;
+  if (!message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
 
   // Read the arguments of the command and separate them.
-  let args = message.content.substring(globals.prefix.length).split(/\s+/);
+  let args = message.content.substring(getCurrentServer(message.guild.id).config.prefix.length).split(/\s+/);
 
   // If command exists
   if (client.commands.get(args[0])) {

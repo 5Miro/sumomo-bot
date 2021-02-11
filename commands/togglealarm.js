@@ -2,7 +2,7 @@ const userController = require("../controllers/userController");
 const strings = require("../strings");
 
 module.exports = {
-    name: "togglealarm",
+    name: "toggleAlarm",
     descrip: "Recibe un DM cuando se reseteen tus rolls y claims de Mudae.",
     hidden: false,
     execute(message) {

@@ -11,18 +11,22 @@ const guildSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    prefix: {
-        type: String,
-        default: "|",
+    config: {
+        prefix: {
+            type: String,
+            default: "|", // Prefix to identify commands.
+        },
+        mudae: {
+            initial_hour: { type: Number, default: "1" },
+            initial_minutes: { type: Number, default: "0" },
+            claim_interval: { type: Number, default: "3" },
+            rolls_interval: { type: Number, default: "1" },
+        },
     },
-    mudae: {
-        prefix: { type: String, default: "$" },
-        initial_hour: { type: Number, default: "1" },
-        initial_minutes: { type: Number, default: "0" },
-        claim_interval: { type: Number, default: "3" },
-        rolls_interval: { type: Number, default: "1" },
-    }
-});
+},
+    {
+        timestamps: true
+    });
 
 const Guild = mongoose.model("guilds", guildSchema);
 
