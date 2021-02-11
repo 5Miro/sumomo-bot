@@ -1,7 +1,7 @@
 {
-	"name": "mudae-alarm-bot",
-	"version": "1.0.0",
-	"description": "Alarm bot for Mudae from discord.",
+	"name": "sumomo",
+	"version": "5.0.0",
+	"description": "Multipurpose bot for Discord.",
 	"main": "index.js",
 	"scripts": {
 		"start": "nodemon index.js"

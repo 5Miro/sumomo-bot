@@ -10,4 +10,8 @@ module.exports = {
     FS_MAX_QUOTA: 10,
     FS_QUOTA_INTERVAL: 1,
 
+
+    // MUSIC
+    LIST_MAX_LENGTH: 5, // !list max length
+
 }
