@@ -18,12 +18,13 @@ module.exports = {
                 // Now check HOURS
                 for (i = guild.config.mudae.initial_hour; i < globals.hours_per_day; i += guild.config.mudae.claim_interval) {
                     if (date.getUTCHours() == i) {
-                        ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length), guild.guild_id]); // get random string
+                        console.log("ring");
+                        ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length)], guild.guild_id); // get random string
                         return;
                     }
                 }
                 // No claims, but still rolls
-                ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length), guild.guild_id]); // get random string
+                ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length)], guild.guild_id); // get random string
 
             }
         })
