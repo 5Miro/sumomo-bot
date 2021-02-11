@@ -6,7 +6,7 @@ module.exports = {
     descrip: "Recibe un DM cuando se reseteen tus rolls y claims de Mudae.",
     hidden: false,
     execute(message) {
-        userController.toggleAlarm(message.author.id, message.author.username).then(doc => {
+        userController.toggleAlarm(message.author.id, message.author.username, message.guild.id).then(doc => {
             if (doc.mudae_alarm) {
                 message.channel.send(message.author.username + strings.SUBSCRIBED);
             } else {
