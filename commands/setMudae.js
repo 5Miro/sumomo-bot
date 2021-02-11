@@ -25,7 +25,7 @@ module.exports = {
                 // Let know that changes were succesful.
                 message.channel.send("Éxito: la configuración de la alarma de Mudae ha sido actualizada.");
             }).catch(err => {
-                message.channel.send("Error. La sintaxis o los valores son inválidos.");
+                message.channel.send("Error. La sintaxis o los valores son inválidos. Ej: setMudae 14 45 3 1 (Empieza a las 14:45, los claims son cada 3 horas, los rolls cada 1 hora. El horario es UTC)");
             });
         }).catch(err => {
             console.log(err);
