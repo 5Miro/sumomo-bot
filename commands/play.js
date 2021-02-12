@@ -175,7 +175,7 @@ module.exports = {
 
     // Play the music. When song ends, remove the first song from the queue and play again until there's no more songs.
     var dispatcher = serverQueue.connection // play() returns a StreamDispatcher object. It sends voice packet data to the voice connection
-      .play(await ytdl(song.url, { highWaterMark: 1 << 25 }).catch(err => {
+      .play(await ytdl(song.url, { highWaterMark: 1 << 25, quality: "highestaudio", filter: "audioonly" }).catch(err => {
         console.log("ytdl threw an exception\n" + err)
       }), { type: "opus" })
       .on("finish", () => {
@@ -185,7 +185,7 @@ module.exports = {
         this.play(guild, serverQueue.songs[0], servers).catch(err => {
           console.log("Exception when playing next song. Trying to play again.");
           // If failed, try once again.
-          setTimeout(function () {
+          setTimeout(() => {
             this.play(guild, serverQueue.songs[0], servers).catch(err => {
               console.log("Exception when playing next song.");
             })
@@ -195,7 +195,7 @@ module.exports = {
       .on("error", (error) => console.error(error));
 
     // Sets the volume to 1.
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 100);
+    dispatcher.setVolume(0.1);
   },
 
   // VALIDATORS
