@@ -5,7 +5,10 @@ const strings = require("../strings");
 module.exports = {
     name: "mudaeAlarm",
     isActivated: true,
-    descrip: "Sumomo envía DMs recordando sobre los resets de Mudae",
+    descrip: [
+        "Sumomo sends DMs as reminders of Mudae's resets",
+        "Sumomo envía MPs recordando sobre los resets de Mudae"
+    ],
     OnInterval() {
 
         // Get current time and date.
@@ -18,12 +21,12 @@ module.exports = {
                 // Now check HOURS
                 for (i = guild.config.mudae.initial_hour; i < globals.hours_per_day; i += guild.config.mudae.claim_interval) {
                     if (date.getUTCHours() == i) {
-                        ringAlarm(strings.RESET_CLAIMS[Math.floor(Math.random() * strings.RESET_CLAIMS.length)], guild.guild_id); // get random string
+                        ringAlarm(strings.getRandomString("RESET_CLAIMS", guild.guild_id), guild.guild_id); // get random string
                         return;
                     }
                 }
                 // No claims, but still rolls
-                ringAlarm(strings.RESET_ROLLS[Math.floor(Math.random() * strings.RESET_ROLLS.length)], guild.guild_id); // get random string
+                ringAlarm(strings.getRandomString("RESET_ROLLS", guild.guild_id), guild.guild_id); // get random string
 
             }
         })

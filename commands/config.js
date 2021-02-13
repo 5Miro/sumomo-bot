@@ -1,20 +1,20 @@
 const Discord = require("discord.js");
 const globals = require("../globals");
 const { readGuild } = require("../controllers/guildController");
-const { getCurrentServer } = require("../utils");
+const strings = require("../strings");
 
 module.exports = {
     name: "config",
-    descrip: "Muestra la configuración del servidor.",
+    descrip: ["Show server's configuration.", "Muestra la configuración del servidor."],
     hidden: false,
     execute(message) {
         readGuild(message.guild.id).then(doc => {
             const embed = new Discord.MessageEmbed()
-                .setAuthor("desarrollado por Miro", "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png", "https://github.com/5Miro")
+                .setAuthor(strings.getSystemString("AUTHOR", message.guild.id), "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png", "https://github.com/5Miro")
                 .setTitle(doc.name)
-                .setDescription("Configuración del servidor.")
+                .setDescription(strings.getCommandString("CONFIG", "EMBED_DESCRIPTION", message.guild.id))
                 .setColor(globals.embed_color)
-                .addFields({ name: "\u200B", value: "**Parámetros:**" });
+                .addFields({ name: "\u200B", value: strings.getCommandString("CONFIG", "EMBED_SUBTITLE", message.guild.id) });
 
             // Iterate over config object and embed fields.
             Object.entries(doc.config).forEach(cfg => {
@@ -25,7 +25,7 @@ module.exports = {
 
             embed
                 .addFields({ name: "\u200B", value: "\u200B" })
-                .setFooter("¡Gracias por confiar en Sumomo!");
+                .setFooter(strings.getSystemString("FOOTER", message.guild.id));
 
             message.react("❤");
             message.channel.send(embed).catch(console.error);

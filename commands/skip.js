@@ -1,8 +1,9 @@
 const { getQueues, isActivated } = require("../my_modules/music");
+const strings = require("../strings");
 
 module.exports = {
   name: "skip",
-  descrip: "Saltea la canción actual.",
+  descrip: ["Skips current song.", "Saltea la canción actual."],
   hidden: false,
   execute(message) {
 
@@ -12,10 +13,10 @@ module.exports = {
     const serverQueue = getQueues().get(message.guild.id)
 
     if (!message.member.voice.channel) {
-      return message.channel.send("Debes estar en un canal de voz para detener la música.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "NO_VOICE_CHANNEL", message.guild.id)).catch(console.error);
     }
     if (!serverQueue) {
-      return message.channel.send("La cola de reproducción está vacía. No hay canciones para saltear.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "NO_SONGS_IN_QUEUE", message.guild.id)).catch(console.error);
     }
     // End this dispatcher to play the next song.
     try {

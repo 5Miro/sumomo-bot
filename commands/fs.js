@@ -1,13 +1,11 @@
-const Discord = require("discord.js");
-const globals = require("../globals");
 const { GetFriendship } = require("../my_modules/friendship");
 
 module.exports = {
     name: "fs",
-    descrip: "Muestra el % de amistad con Sumomo.",
+    descrip: ["Show Sumomo's friendship % with the user.", "Muestra el % de amistad con Sumomo del usuario."],
     hidden: false,
     execute(message) {
+        // Call function from friendship module.
         GetFriendship(message);
-
     }
 }

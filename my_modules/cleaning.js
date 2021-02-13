@@ -4,7 +4,10 @@ const globals = require("../globals");
 module.exports = {
     name: "cleaning",
     isActivated: false,
-    descrip: "Limpia los DMs de Sumomo que no se borraron",
+    descrip: [
+        "Cleans up Sumomo's old DMs that were not erased",
+        "Limpia los DMs de Sumomo que no se borraron"
+    ],
     OnInterval() {
         // This function will be called periodically.
         userController.readAll().then(users => {

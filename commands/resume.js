@@ -1,8 +1,9 @@
 const { getQueues, isActivated } = require("../my_modules/music");
+const strings = require("../strings");
 
 module.exports = {
   name: "resume",
-  descrip: "Continúa la reproducción luego de haberse pausado.",
+  descrip: ["Resumes song after being paused.", "Continúa la reproducción luego de haberse pausado."],
   hidden: false,
   execute(message) {
 
@@ -12,10 +13,10 @@ module.exports = {
     const serverQueue = getQueues().get(message.guild.id)
 
     if (!message.member.voice.channel) {
-      return message.channel.send("Debes estar en un canal de voz para ejecutar este comando.").catch(console.error);
+      return message.channel.send(strings.getModuleStrins("MUSIC", "NO_VOICE_CHANNEL", message.guild.id)).catch(console.error);
     }
     if (!serverQueue) {
-      return message.channel.send("No hay canciones en la cola.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "NO_SONGS_IN_QUEUE", message.guild.id)).catch(console.error);
     }
     // End this dispatcher to play the next song.
     if (!serverQueue.playing) {
@@ -25,7 +26,7 @@ module.exports = {
       } catch (err) {
         console.log("Exception: resuming dispatcher has failed.");
       }
-      return message.channel.send("Continuando reproducción.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "RESUMED", message.guild.id)).catch(console.error);
     }
   },
 };

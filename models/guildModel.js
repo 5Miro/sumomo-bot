@@ -22,6 +22,10 @@ const guildSchema = new mongoose.Schema({
             claim_interval: { type: Number, default: "3" },
             rolls_interval: { type: Number, default: "1" },
         },
+        language: {
+            type: String,
+            default: "en"
+        }
     },
 },
     {

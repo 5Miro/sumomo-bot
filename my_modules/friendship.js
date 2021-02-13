@@ -1,5 +1,6 @@
 const userController = require("../controllers/userController");
 const globals = require("../globals");
+const { getGif } = require("../strings");
 const strings = require("../strings");
 const { getCurrentServer } = require("../utils");
 
@@ -24,7 +25,10 @@ const ON_CONNECTION_GREET_INDEX_TH = 3;
 module.exports = {
     name: "friendship",
     isActivated: true,
-    descrip: "Usuarios ganan o pierden puntos de amistad de Sumomo",
+    descrip: [
+        "Users gain or lose friendship points with Sumomo",
+        "Usuarios ganan o pierden puntos de amistad de Sumomo"
+    ],
     OnInterval() {
         // This function will be called periodically.
 
@@ -71,7 +75,7 @@ module.exports = {
                 if (!doc) return;
                 if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH] && doc.fs_quota < globals.FS_MAX_QUOTA) {
                     client.users.fetch(doc.user_id).then(user => {
-                        user.send(doc.username + strings.HELLO[Math.floor(Math.random() * strings.HELLO.length)]).then(msg => {
+                        user.send(doc.username + strings.getRandomString("HELLO", newState.guild.guild_id)).then(msg => {
                             // Delete message after timeout.
                             msg.delete({ timeout: 60 * 1000 }).catch(err => {
                                 console.log("No se ha podido borrar el mensaje.");
@@ -93,16 +97,16 @@ module.exports = {
             if (user) {
                 for (let i = 0; i < THRESHOLDS.length - 1; i++) {
                     if (user.friendship > THRESHOLDS[i] && user.friendship <= THRESHOLDS[i + 1]) {
-                        message.channel.send("Tu amistad con Sumomo es del " + Math.round(user.friendship / globals.FS_MAX_VALUE * 100) + "%. " + strings.FRIENDSHIP[i]);
-                        message.channel.send(strings.GIFS.FRIENDSHIP[i]);
+                        message.channel.send(strings.getModuleString("FRIENDSHIP", "MESSAGE_HEADER", message.guild.id) + Math.round(user.friendship / globals.FS_MAX_VALUE * 100) + "%. " + strings.getString("FRIENDSHIP", message.guild.id, i));
+                        message.channel.send(getGif("FRIENDSHIP", i));
                     }
                 }
             } else {
                 userController.createUser(message.author.id, message.author.username, message.guild.id).then(newUser => {
                     for (let i = 0; i < THRESHOLDS.length - 1; i++) {
                         if (newUser.friendship > THRESHOLDS[i] && newUser.friendship <= THRESHOLDS[i + 1]) {
-                            message.channel.send("Tu amistad con Sumomo es del " + Math.round(newUser.friendship / globals.FS_MAX_VALUE * 100) + "%. " + strings.FRIENDSHIP[i]);
-                            message.channel.send(strings.GIFS.FRIENDSHIP[i]);
+                            message.channel.send(strings.getModuleString("FRIENDSHIP", "MESSAGE_HEADER", message.guild.id) + Math.round(newUser.friendship / globals.FS_MAX_VALUE * 100) + "%. " + strings.getString("FRIENDSHIP", message.guild.id, i));
+                            message.channel.send(getGif("FRIENDSHIP", i));
                         }
                     }
                 })

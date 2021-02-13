@@ -3,7 +3,10 @@ const serverQueues = new Map() // A map that stores servers's queues. They key t
 module.exports = {
     name: "music",
     isActivated: true,
-    descrip: "Sumomo reproduce música de Youtube.",
+    descrip: [
+        "Sumomo plays music from Youtube",
+        "Sumomo reproduce música de Youtube."
+    ],
     OnInterval() {
         // This function will be called periodically.
 

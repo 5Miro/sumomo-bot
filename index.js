@@ -154,8 +154,17 @@ client.setInterval(() => {
   modules.forEach(mod => {
     if (mod.isActivated) mod.OnInterval();
   });
-
 }, globals.time_check_interval);
+
+// Every LOCAL_DATA_INTEGRITY_CHECK_INTERVAL, get server docs from DB and update local collection.
+client.setInterval(() => {
+  // Get all servers data from DB.
+  guildController.readAll().then(docs => {
+    docs.forEach(doc => {
+      client.servers.set(doc.guild_id, doc);
+    });
+  });
+}, globals.LOCAL_DATA_INTEGRITY_CHECK_INTERVAL);
 
 
 // Log in this bot.

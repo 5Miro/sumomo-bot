@@ -1,8 +1,9 @@
 const { getQueues, isActivated } = require("../my_modules/music");
+const strings = require("../strings");
 
 module.exports = {
   name: "pause",
-  descrip: "Pausa la música.",
+  descrip: ["Pause the music.", "Pausa la música."],
   hidden: false,
   execute(message) {
 
@@ -12,10 +13,10 @@ module.exports = {
     const serverQueue = getQueues().get(message.guild.id)
 
     if (!message.member.voice.channel) {
-      return message.channel.send("Debes estar en un canal de voz para ejecutar este comando.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "NO_VOICE_CHANNEL", message.guild.id)).catch(console.error);
     }
     if (!serverQueue) {
-      return message.channel.send("No hay canciones en la cola.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "NO_SONGS_IN_QUEUE", message.guild.id)).catch(console.error);
     }
     // End this dispatcher to play the next song.
     if (serverQueue.playing) {
@@ -25,7 +26,7 @@ module.exports = {
       } catch (err) {
         console.log("Exception: pausing dispatcher has failed.");
       }
-      return message.channel.send("Reproducción pausada.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "PAUSED", message.guild.id)).catch(console.error);
     }
   },
 };

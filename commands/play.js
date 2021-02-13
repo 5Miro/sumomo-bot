@@ -3,11 +3,14 @@ const ytdl = require("ytdl-core-discord"); // A youtube downloader required to p
 const globals = require("../globals");
 const YouTubeAPI = require("simple-youtube-api");
 const { getQueues, isActivated } = require("../my_modules/music");
+const strings = require("../strings");
 const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
+
+const defaultVolume = 0.5;
 
 module.exports = {
   name: "play",
-  descrip: "Agrega un link de canción o playlist de Youtube, o busca una canción.",
+  descrip: ["Add a song or playlist from Youtube, or search for a song.", "Agrega un link de canción o playlist de Youtube, o busca una canción."],
   hidden: false,
   execute(message) {
 
@@ -24,7 +27,7 @@ module.exports = {
     // If user is not connected to a voice channel, then return.
     if (!voiceChannel) {
       message.react("👀").catch(console.error);
-      return message.channel.send("Necesitas estar en un canal de voz para oír mi música.").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "NO_VOICE_CHANNEL", message.guild.id)).catch(console.error);
     }
 
     // Get the permissions of this bot.
@@ -33,7 +36,7 @@ module.exports = {
     // Check if bot has the necessary permissions.
     if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
       message.react("👀").catch(console.error);
-      return message.channel.send("Me faltan permisos para tocar mi música T_T .").catch(console.error);
+      return message.channel.send(strings.getModuleString("MUSIC", "LACK_PERMISSIONS", message.guild.id)).catch(console.error);
     }
 
     // Read the arguments of the command and separate them.
@@ -47,10 +50,10 @@ module.exports = {
 
       // Is there a second argument?
       if (!searchString) {
-        return message.channel.send("No has escrito ningún criterio de búsqueda o link.").catch(console.error);
+        return message.channel.send(strings.getModuleString("MUSIC", "NO_PLAY_INPUT", message.guild.id)).catch(console.error);
       }
 
-      message.channel.send("Buscando en Youtube...").catch(console.error);
+      message.channel.send(strings.getModuleString("MUSIC", "SEARCHING_YOUTUBE", message.guild.id)).catch(console.error);
 
       // Get video from API.
       youtube.searchVideos(searchString, 1).then(res => {
@@ -60,7 +63,7 @@ module.exports = {
         // Respond to message.
         message.react("👍").catch(console.error);
         const embed = new Discord.MessageEmbed();
-        embed.setDescription("La canción ha sido agregada a la cola.").setColor(globals.COLOR);
+        embed.setDescription(strings.getModuleString("MUSIC", "SONG_ADDED", message.guild.id)).setColor(globals.embed_color);
         return message.channel.send(embed).catch(console.error);
       }).catch(err => {
         console.log("Exception: searchVideo() from API threw an error.");
@@ -80,7 +83,7 @@ module.exports = {
       // Get video from  API.
       youtube.getVideo(url).then(res => {
         // Set embed description.
-        embed.setDescription("La canción ha sido agregada a la cola.").setColor(globals.COLOR);
+        embed.setDescription(strings.getModuleString("MUSIC", "SONG_ADDED", message.guild.id)).setColor(globals.embed_color);
         // Add the song to the queue.    
         this.enqueueSong(res, message, serverQueue, servers);
         // React to message
@@ -99,7 +102,7 @@ module.exports = {
           // Add the song to the queue.    
           this.enqueueSong(videos, message, serverQueue, servers);
           // Set embed description.
-          embed.setDescription("**" + videos.length + "**" + " canciones han sido agregadas.").setColor(globals.COLOR);
+          embed.setDescription("**" + videos.length + "**" + strings.getModuleString("MUSIC", "SONGS_ADDED", message.guild.id)).setColor(globals.embed_color);
           // React to message
           message.react("👍").catch(console.error);
           // Send embed.
@@ -170,7 +173,7 @@ module.exports = {
 
     // Show currently playing.
     const embed = new Discord.MessageEmbed();
-    embed.setTitle("**Sonando ahora**").setDescription(song.title).setColor(globals.COLOR).setURL(song.url);
+    embed.setTitle(strings.getModuleString("MUSIC", "PLAYING_NOW_2", guild.id)).setDescription(song.title).setColor(globals.embed_color).setURL(song.url);
     serverQueue.textChannel.send(embed).catch(console.error);
 
     // Play the music. When song ends, remove the first song from the queue and play again until there's no more songs.
@@ -195,7 +198,7 @@ module.exports = {
       .on("error", (error) => console.error(error));
 
     // Sets the volume to 1.
-    dispatcher.setVolume(0.1);
+    dispatcher.setVolume(defaultVolume);
   },
 
   // VALIDATORS

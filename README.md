@@ -1,6 +1,6 @@
 ﻿# Sumomo
 
-Multipurpose bot for Discord. Non-public bot, for personal use only.
+Multipurpose bot for Discord. Sumomo is optimistic, hyperactive and extra kawaii.
 
 ## Documentation
 
@@ -14,6 +14,9 @@ Sumomo is a node.js application for Discord. It uses the following dependencies:
   > Object modeling for MongoDB.
 - Dotenv
   > Load enviromental variables from a .env file.
+- ytdl-core-discord
+  > YouTube downloading module.
+
 
 As a modular bot, we can continue to add functionality to its program. This
 documentation will be updated accordingly.
@@ -73,14 +76,26 @@ module.exports  =  {
 }
 ```
 
-**4- Default commands**
+## Commands
 
 - |help
   > Shows information and commands.
-- |modules
-  > Lists every module and their state.
-- |toggleModule (moduleName)
-  > Toggles a module on/off.
+- |lang (value = en | es)
+  > Sets Sumomo's language. So far, only english (en) and spanish (es) are available.
+- |setPrefix (value)
+  > Sets a new prefix for Sumomo's commands.
+- |toggleAlarm
+  > Subscribes the user to the Mudae Alarm. This is a system that notifies subscribed users when their Mudae rolls and claims are reset. This notification is sent as a DM to each user. That means that if your rolls reset every hour at xx:15 minutes, you will get a DM from Sumomo as a reminder in that exact moment.
+  > Default value is FALSE for every user in the server. Every user must execute this command on their own if they want to subscribe.
+ - |setMudae (initial_hour) (initial_minutes) (claim_interval) (rolls_interval)
+	  > In order to make the Mudae Alarm work as intended, your server's admin must set the alarm to the corresponding time.
+	 As an example: setMudae 1 45 3 1 (begins at 01:45, claims every 3 hours, rolls every hour. UTC time zone is used. Initial hour must be set to the earliest valid value as possible. You can setMudae to 14 45 3 1, but it would start counting from 14:45 to 00:00, meaning you would not get any notification from 00:00 to 14:45.
+- |config
+	> Show server's configuration, such as prefix, language, Mudae's alarm time.
+- |fs
+	> Shows user's friendship % with Sumomo.
+- |resetfs
+	> Resets friendship % for all users in the server. Admin only.
 
 **5- Custom commands**
 

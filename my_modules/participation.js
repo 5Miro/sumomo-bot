@@ -1,18 +1,22 @@
+const { getRandomGif } = require("../strings");
 const strings = require("../strings");
 const { getCurrentServer } = require("../utils");
 
 const CONVERSATIONS = [
-    { context: "marriage", input: /\bare now married\b/, output: strings.MARRIAGE, reaction: "🎉", gif: strings.GIFS.DANCE },
-    { context: "divorce", input: /\bare now divorced\b/, output: strings.DIVORCE, reaction: "😱", gif: null },
-    { context: "surprise", input: /\bnooo+\b/, output: strings.SURPRISE, reaction: "😱", gif: null },
-    { context: "trade", input: /(\bexchange is over\b)|(\b(given to)\b)/, output: strings.TRADE, reaction: "🤩", gif: null },
-    { context: "gift", input: /(\b(just gifted)\b)/, output: strings.GIFT, reaction: "🥴", gif: null },
+    { context: "marriage", input: /\bare now married\b/, output: "MARRIAGE", reaction: "🎉", gif: "DANCE" },
+    { context: "divorce", input: /\bare now divorced\b/, output: "DIVORCE", reaction: "😱", gif: null },
+    { context: "surprise", input: /\bnooo+\b/, output: "SURPRISE", reaction: "😱", gif: null },
+    { context: "trade", input: /(\bexchange is over\b)|(\b(given to)\b)/, output: "TRADE", reaction: "🤩", gif: null },
+    { context: "gift", input: /(\b(just gifted)\b)/, output: "GIFT", reaction: "🥴", gif: null },
 ]
 
 module.exports = {
     name: "participation",
     isActivated: true,
-    descrip: "Sumomo participa de conversaciones con mensajes y reacciones.",
+    descrip: [
+        "Sumomo participates in conversations through messages and reactions",
+        "Sumomo participa de conversaciones con mensajes y reacciones."
+    ],
     OnInterval() {
         // This function will be called periodically.
 
@@ -30,9 +34,9 @@ module.exports = {
         CONVERSATIONS.forEach(element => {
             if (element.input.test(message.content.toLowerCase())) {
                 message.react(element.reaction);
-                message.channel.send(element.output[Math.floor(Math.random() * element.output.length)]);
+                message.channel.send(strings.getRandomString(element.output, message.guild.id));
                 if (element.gif) {
-                    message.channel.send(element.gif[Math.floor(Math.random() * element.gif.length)]);
+                    message.channel.send(getRandomGif(element.gif));
                 }
                 return;
             }
