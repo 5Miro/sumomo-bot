@@ -11,11 +11,11 @@
 	"dependencies": {
 		"discord.js": "^12.5.1",
 		"dotenv": "^8.2.0",
-		"mongoose": "^5.11.15",
+		"mongoose": "^5.11.18",
 		"nodemon": "^2.0.7",
 		"opusscript": "0.0.7",
 		"simple-youtube-api": "^5.2.1",
-		"ytdl-core": "^3.4.2",
-		"ytdl-core-discord": "^1.2.3"
+		"ytdl-core": "^4.5.0",
+		"ytdl-core-discord": "^1.2.5"
 	}
 }

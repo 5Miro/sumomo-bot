@@ -3,22 +3,25 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
 //////////////////////////////
-////////////////////////////// 
+//////////////////////////////
 
 // Connect to database.
 const mongoose = require("mongoose");
 const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.DB_PASSWORD);
 
-mongoose.connect(DB, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
-}).then(con => {
-  console.log("DB connection succesful.");
-}).catch(err => {
-  console.log("DB connection failed.")
-});
+mongoose
+	.connect(DB, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useFindAndModify: false,
+		useUnifiedTopology: true,
+	})
+	.then((con) => {
+		console.log("DB connection succesful.");
+	})
+	.catch((err) => {
+		console.log("DB connection failed.");
+	});
 
 //////////////////////////////
 //////////////////////////////
@@ -48,9 +51,9 @@ const commandFiles = fs.readdirSync("./commands/").filter((file) => file.endsWit
 
 // Loop over the command files and add them to the command collection.
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
+	const command = require(`./commands/${file}`);
 
-  client.commands.set(command.name, command);
+	client.commands.set(command.name, command);
 }
 
 //////////////////////////////
@@ -63,9 +66,9 @@ const moduleFiles = fs.readdirSync("./my_modules/").filter((file) => file.endsWi
 
 // Loop over the module files and add them to the module collection.
 for (const file of moduleFiles) {
-  const mod = require(`./my_modules/${file}`);
+	const mod = require(`./my_modules/${file}`);
 
-  client.modules.set(mod.name, mod);
+	client.modules.set(mod.name, mod);
 }
 
 //////////////////////////////
@@ -73,99 +76,96 @@ for (const file of moduleFiles) {
 
 // Listeners for the BOT state.
 client.once("ready", () => {
-  console.log("Sumomo: online");
+	console.log("Sumomo: online");
 });
 
 client.on("ready", () => {
-  client.user.setActivity("|help", { type: "PLAYING" });
+	client.user.setActivity("|help", { type: "PLAYING" });
 
-  // Get all servers data from DB.
-  guildController.readAll().then(docs => {
-    docs.forEach(doc => {
-      client.servers.set(doc.guild_id, doc);
-    });
-  });
+	// Get all servers data from DB.
+	guildController.readAll().then((docs) => {
+		docs.forEach((doc) => {
+			client.servers.set(doc.guild_id, doc);
+		});
+	});
 });
 
 // Bot joined a new server.
-client.on("guildCreate", guild => {
-  console.log("Joined a new guild: " + guild.name);
-  guildController.createGuild(guild).then(doc => {
-    client.servers.set(guild.id, doc);
-  });
-})
+client.on("guildCreate", (guild) => {
+	console.log("Joined a new guild: " + guild.name);
+	guildController.createGuild(guild).then((doc) => {
+		client.servers.set(guild.id, doc);
+	});
+});
 
 // Bot left a server.
-client.on("guildDelete", guild => {
-  console.log("Left a guild: " + guild.name);
-  guildController.deleteGuild(guild.id);
-  client.servers.delete(guild.id);
-})
+client.on("guildDelete", (guild) => {
+	console.log("Left a guild: " + guild.name);
+	guildController.deleteGuild(guild.id);
+	client.servers.delete(guild.id);
+});
 
 //////////////////////////////
 //////////////////////////////
 
 client.on("voiceStateUpdate", (oldState, newState) => {
-  if (oldState.member.user.bot) return; // if user is a bot, return.
-  // Call OnVoiceStateUpdate functions from modules.
-  let modules = client.modules.array();
-  modules.forEach(mod => {
-    if (mod.isActivated && mod.OnVoiceStateUpdate !== null) mod.OnVoiceStateUpdate(oldState, newState); // if mod is activated, call function
-  });
+	if (oldState.member.user.bot) return; // if user is a bot, return.
+	// Call OnVoiceStateUpdate functions from modules.
+	let modules = client.modules.array();
+	modules.forEach((mod) => {
+		if (mod.isActivated && mod.OnVoiceStateUpdate !== null) mod.OnVoiceStateUpdate(oldState, newState); // if mod is activated, call function
+	});
 });
 
 //////////////////////////////
 //////////////////////////////
 
-
 // Function to read messages.
 client.on("message", async (message) => {
+	// Call OnMessage functions from modules.
+	let modules = client.modules.array();
+	modules.forEach((mod) => {
+		if (mod.isActivated) mod.OnMessage(message); // if mod is activated, call function
+	});
 
-  // Call OnMessage functions from modules.
-  let modules = client.modules.array();
-  modules.forEach(mod => {
-    if (mod.isActivated) mod.OnMessage(message); // if mod is activated, call function
-  });
+	/**
+	 * Check if message is a command for this bot.
+	 */
+	// If message comes from any bot or from system, return;
+	if (message.author.bot || message.system) return;
 
-  /**
-   * Check if message is a command for this bot.
-   */
-  // If message comes from any bot or from system, return;
-  if (message.author.bot || message.system) return;
+	// If a message does not start with the prefix, return.
+	if (!message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
 
-  // If a message does not start with the prefix, return.
-  if (!message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
+	// Read the arguments of the command and separate them.
+	let args = message.content.substring(getCurrentServer(message.guild.id).config.prefix.length).split(/\s+/);
 
-  // Read the arguments of the command and separate them.
-  let args = message.content.substring(getCurrentServer(message.guild.id).config.prefix.length).split(/\s+/);
-
-  // If command exists
-  if (client.commands.get(args[0])) {
-    client.commands.get(args[0]).execute(message); // execute it
-  } else {
-    // No command found.
-    //message.channel.send(strings.CMD_NOT_FOUND[Math.floor(Math.random() * strings.CMD_NOT_FOUND.length)]);
-  }
+	// If command exists
+	if (client.commands.get(args[0])) {
+		client.commands.get(args[0]).execute(message); // execute it
+	} else {
+		// No command found.
+		//message.channel.send(strings.CMD_NOT_FOUND[Math.floor(Math.random() * strings.CMD_NOT_FOUND.length)]);
+	}
 });
 
 // Checks time periodically and call OnInterval functions from each module.
 client.setInterval(() => {
-  let modules = client.modules.array();
-  modules.forEach(mod => {
-    if (mod.isActivated) mod.OnInterval();
-  });
+	let modules = client.modules.array();
+	modules.forEach((mod) => {
+		if (mod.isActivated) mod.OnInterval();
+	});
 }, globals.time_check_interval);
 
 // Every LOCAL_DATA_INTEGRITY_CHECK_INTERVAL, get server docs from DB and update local collection.
 client.setInterval(() => {
-  // Get all servers data from DB.
-  guildController.readAll().then(docs => {
-    docs.forEach(doc => {
-      client.servers.set(doc.guild_id, doc);
-    });
-  });
+	// Get all servers data from DB.
+	guildController.readAll().then((docs) => {
+		docs.forEach((doc) => {
+			client.servers.set(doc.guild_id, doc);
+		});
+	});
 }, globals.LOCAL_DATA_INTEGRITY_CHECK_INTERVAL);
-
 
 // Log in this bot.
 client.login(process.env.TOKEN);
