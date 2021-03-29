@@ -18,4 +18,7 @@ module.exports = {
 	LIST_MAX_LENGTH: 5, // !list max length
 
 	LANG: ["en", "es"],
+
+	// CALENDAR
+	DEFAULT_DAYS_IN_ADVANCE: 15,
 };

@@ -28,6 +28,11 @@ const guildSchema = new mongoose.Schema(
 				default: "en",
 			},
 		},
+		calendar: {
+			channel_id: { type: String, default: null },
+			time_zone: { type: Number, default: 0 },
+			events: [{ type: String, required: false, default: null }],
+		},
 	},
 	{
 		timestamps: true,

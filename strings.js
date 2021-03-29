@@ -102,6 +102,30 @@ const LANG_EN = {
 			SONGS_ADDED: " songs added.",
 			RESUMED: "Resuming music.",
 		},
+		CALENDAR: {
+			CALENDAR_ASCII: `
+┌────────────────────┐
+│ /month      / year │
+├──┬──┬──┬──┬──┬──┬──┤
+│Su│Mo│Tu│We│Th│Fr│Sa│
+├──┼──┼──┼──┼──┼──┼──┤
+│00│01│02│03│04│05│06│
+├──┼──┼──┼──┼──┼──┼──┤
+│07│08│09│10│11│12│13│
+├──┼──┼──┼──┼──┼──┼──┤
+│14│15│16│17│18│19│20│
+├──┼──┼──┼──┼──┼──┼──┤
+│21│22│23│24│25│26│27│
+├──┼──┼──┼──┼──┼──┼──┤
+│28│29│30│31│32│33│34│
+├──┼──┼──┼──┼──┼──┼──┤
+│35│36│37│38│39│40│41│
+└──┴──┴──┴──┴──┴──┴──┘`,
+			MONTHS: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			UPCOMING_EVENTS_TITLE: "٩(•ᗜ•)٩ these are the upcoming events:",
+			TODAY_TEXT: "TODAY!!",
+			TODAY_IS: "Today is ",
+		},
 	},
 };
 
@@ -205,6 +229,30 @@ const LANG_ES = {
 			SONG_ADDED: "La canción ha sido agregada a la cola.",
 			SONGS_ADDED: " canciones han sido agregadas.",
 			RESUMED: "Continuando reproducción.",
+		},
+		CALENDAR: {
+			CALENDAR_ASCII: `
+┌────────────────────┐
+│ /month      / year │
+├──┬──┬──┬──┬──┬──┬──┤
+│Do│Lu│Ma│Mi│Ju│Vi│Sa│
+├──┼──┼──┼──┼──┼──┼──┤
+│00│01│02│03│04│05│06│
+├──┼──┼──┼──┼──┼──┼──┤
+│07│08│09│10│11│12│13│
+├──┼──┼──┼──┼──┼──┼──┤
+│14│15│16│17│18│19│20│
+├──┼──┼──┼──┼──┼──┼──┤
+│21│22│23│24│25│26│27│
+├──┼──┼──┼──┼──┼──┼──┤
+│28│29│30│31│32│33│34│
+├──┼──┼──┼──┼──┼──┼──┤
+│35│36│37│38│39│40│41│
+└──┴──┴──┴──┴──┴──┴──┘`,
+			MONTHS: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+			UPCOMING_EVENTS_TITLE: "٩(•ᗜ•)٩ estos son los eventos venideros:",
+			TODAY_TEXT: "HOY!!",
+			TODAY_IS: "Hoy es ",
 		},
 	},
 };

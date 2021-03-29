@@ -87,11 +87,11 @@ module.exports = {
 		// if user just connected from a voice channel.
 		if (oldState.channel === null && newState.channel !== null) {
 			// If FS is above a certain threshold, say hello to user. Only say hello if you can gain points, to avoid spam.
-			userController.readUser(newState.member.user.id).then((doc) => {
+			userController.readUser(newState.member.user.id, newState.guild.id).then((doc) => {
 				if (!doc) return;
-				if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH] && doc.fs_quota < globals.FS_MAX_QUOTA) {
+				if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH]) {
 					client.users.fetch(doc.user_id).then((user) => {
-						user.send(doc.username + strings.getRandomString("HELLO", newState.guild.guild_id))
+						user.send(doc.username + strings.getRandomString("HELLO", newState.guild.id))
 							.then((msg) => {
 								// Delete message after timeout.
 								msg.delete({ timeout: 60 * 1000 }).catch((err) => {

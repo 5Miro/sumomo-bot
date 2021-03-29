@@ -133,12 +133,14 @@ exports.updateFriendshipAll = async (_value, reset_quota) => {
 			users.forEach((user) => {
 				if (reset_quota) {
 					user.fs_quota = 0;
-				} else {
+				} else if (_value > 0) {
 					user.fs_quota += _value;
 				}
 				if (user.friendship - _value >= 0) {
 					user.friendship += _value;
-					user.save();
+					user.save().catch((err) => {
+						console.log("updateFriendshipAll threw an exception: could not .save() friendship value change");
+					});
 				}
 			});
 		})
