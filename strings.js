@@ -125,6 +125,16 @@ const LANG_EN = {
 			UPCOMING_EVENTS_TITLE: "٩(•ᗜ•)٩ these are the upcoming events:",
 			TODAY_TEXT: "TODAY!!",
 			TODAY_IS: "Today is ",
+			EVENT_ADDED_SUCCESS: "Understood! I'll add it to the calendar (^ᗜ^)",
+			HELP:
+				"Use |calendarNew dd/mm/YYYY [description] to add an event.\nIf you skip the year, current year will be used as default\n\nFor annual events, use |calendarNew repeat dd/mm/YYYY [description]\nAnnual events will be rescheduled automatically!\n\nExample 1: |calendarNew repeat 23/10/2021 Sumomo's birthday\nExample 2: |calendarNew 5/2/2021 top-secret meeting\n\nUse |calendarChannel [text-channel ID] so Sumomo can remind of upcoming events daily on that text-channel.\n\nUse |calendarCheck [days] to see the upcoming events in the following [days]. If you skip the [days] value, this will be 15 by default.",
+			ERROR: {
+				NEW_SYNTAX_ERROR: "Syntax error. Use |calendarHelp for more info",
+				NEW_OLD_DATE_ERROR: "Input date is older than current date o.o",
+				TIME_ZONE_ERROR: "Error: timezone must be set from -12 to 12. If you are outside this range, contact Miro",
+			},
+			CHANNEL_ID_SET: "Calendar's text-channel ID has been set succesfully (^ᗜ^)",
+			TIME_ZONE_SET: "Calendar's timezone has been updated succesfully (^ᗜ^)",
 		},
 	},
 };
@@ -253,6 +263,16 @@ const LANG_ES = {
 			UPCOMING_EVENTS_TITLE: "٩(•ᗜ•)٩ estos son los eventos venideros:",
 			TODAY_TEXT: "HOY!!",
 			TODAY_IS: "Hoy es ",
+			EVENT_ADDED_SUCCESS: "Entendido! Lo agregaré al calendario (^ᗜ^)",
+			HELP:
+				"Utiliza |calendarNew dd/mm/AAAA [descripción] para agregar un evento.\nSi omites el año, se usará el año actual por defecto.\n\nPara eventos anuales, utiliza |calendarNew repeat dd/mm/AAAA [descripción]\nEl evento se renovará cada año automáticamente!\n\nEjemplo 1: |calendarNew repeat 23/10/2021 cumpleaños de Sumomo\nEjemplo 2: |calendarNew 5/2/2021 reunión ultrasecreta\n\nUsa |calendarChannel [ID de canal de texto] para que Sumomo envíe los recordatorios diarios en ese canal de texto.\n\nUtiliza |calendarCheck [dias] para ver los eventos en los próximos [dias]. Si omites el valor de [dias], este será 15 por defecto.",
+			ERROR: {
+				NEW_SYNTAX_ERROR: "Error de sintaxis. Ingresa |calendarHelp para más info",
+				NEW_OLD_DATE_ERROR: "La fecha ingresada es anterior a la fecha actual o.o",
+				TIME_ZONE_ERROR: "Error: la zona horaria debe ser de -12 a 12. Si estás fuera de este rango, contacta con Miro",
+			},
+			CHANNEL_ID_SET: "El ID del canal de texto para el calendario se ha configurado con éxito (^ᗜ^)",
+			TIME_ZONE_SET: "La zona horaria del calendario ha sido actualiza con éxito (^ᗜ^)",
 		},
 	},
 };

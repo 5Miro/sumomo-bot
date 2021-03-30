@@ -65,3 +65,23 @@ exports.readEventFromDate = async (_guild_id, fromDate, daysAdvanced) => {
 		return null;
 	});
 };
+
+exports.readEventBeforeDate = async (_guild_id, fromDate) => {
+	return Event.find(
+		{
+			guild_id: _guild_id,
+			date: { $lt: fromDate },
+		},
+		[],
+		{ sort: { date: 1 } }
+	).catch((err) => {
+		console.log("Event does not exist." + err);
+		return null;
+	});
+};
+
+exports.deleteExpiredEvents = async (_guild_id, _date) => {
+	await Event.deleteMany({ date: { $lt: _date }, repeat: false }).catch((err) => {
+		console.log("deleteExpiredEvents threw an exception\n" + err);
+	});
+};
