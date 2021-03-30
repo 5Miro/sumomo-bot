@@ -86,7 +86,7 @@ module.exports = {
 		 */
 		NewEvent(inputDate, description.join(" "), repeat, message.guild.id).then((doc) => {
 			if (doc) {
-				message.channel.send("Event created.");
+				message.channel.send(getModuleString("CALENDAR", "EVENT_ADDED_SUCCESS", message.guild.id));
 			}
 		});
 	},
