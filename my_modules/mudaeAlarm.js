@@ -48,7 +48,7 @@ async function ringAlarm(string, guild_id) {
 					});
 				})
 				.catch((err) => {
-					console.log("No se ha podido enviar el PM\n" + err);
+					console.log("No se ha podido enviar el PM de ringAlarm\n" + err);
 				});
 		});
 	}

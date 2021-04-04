@@ -80,7 +80,7 @@ client.once("ready", () => {
 });
 
 client.on("ready", () => {
-	client.user.setActivity("|help", { type: "PLAYING" });
+	client.user.setActivity("|help in " + client.guilds.cache.size + " servers!", { type: "PLAYING" });
 
 	// Get all servers data from DB.
 	guildController.readAll().then((docs) => {

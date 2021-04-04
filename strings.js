@@ -290,7 +290,7 @@ module.exports = {
 		];
 	},
 	getString(string, guild_id, i) {
-		if (i) {
+		if (i || i === 0) {
 			return STRINGS_LIBRARY[getServerLanguageIndex(guild_id)][string][i];
 		} else {
 			return STRINGS_LIBRARY[getServerLanguageIndex(guild_id)][string];

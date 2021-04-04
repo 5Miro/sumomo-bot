@@ -67,7 +67,12 @@ module.exports = {
 		if (message.author.bot || message.system) return;
 
 		// If message comes from a guild that hasn't been registered yet.
-		if (getCurrentServer(message.guild.id) === undefined) return;
+		try {
+			if (getCurrentServer(message.guild.id) === undefined) return;
+		} catch (err) {
+			console.error("Exception in friendship module:\n" + err);
+			return;
+		}
 
 		// If a message starts with the prefix
 		if (message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
@@ -90,18 +95,23 @@ module.exports = {
 			userController.readUser(newState.member.user.id, newState.guild.id).then((doc) => {
 				if (!doc) return;
 				if (doc.friendship > THRESHOLDS[ON_CONNECTION_GREET_INDEX_TH]) {
-					client.users.fetch(doc.user_id).then((user) => {
-						user.send(doc.username + strings.getRandomString("HELLO", newState.guild.id))
-							.then((msg) => {
-								// Delete message after timeout.
-								msg.delete({ timeout: 60 * 1000 }).catch((err) => {
-									console.log("No se ha podido borrar el mensaje.");
+					client.users
+						.fetch(doc.user_id)
+						.then((user) => {
+							user.send(doc.username + strings.getRandomString("HELLO", newState.guild.id))
+								.then((msg) => {
+									// Delete message after timeout.
+									msg.delete({ timeout: 60 * 1000 }).catch((err) => {
+										console.error("No se ha podido borrar el mensaje.");
+									});
+								})
+								.catch((err) => {
+									console.error("No se ha podido enviar el PM de friendship\n" + err);
 								});
-							})
-							.catch((err) => {
-								console.log("No se ha podido enviar el PM\n" + err);
-							});
-					});
+						})
+						.catch((err) => {
+							console.error("Friendship exception when fetching user from ID.\n" + err);
+						});
 				}
 			});
 

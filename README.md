@@ -1,6 +1,9 @@
-# Sumomo
+﻿# Sumomo
 
 Multipurpose bot for Discord. Sumomo is optimistic, hyperactive and extra kawaii.
+
+UPDATE 30/3/2021:
+> v5.5: calendar module introduced!
 
 ## Documentation
 
@@ -114,27 +117,59 @@ Understand that Sumomo works **through** the Discord API, so it is subjected to 
 
 > Shows songs in queue.
 
+**Calendar commands**
+
+-	|calendarNew [repeat] [dd/MM/YYYY] [description]
+	> Add an event to the calendar.
+	
+	>If you skip the year, current year will be used as default.
+	
+	>For annual events, use |calendarNew **repeat** dd/mm/YYYY [description]
+	Annual events will be rescheduled automatically!
+	
+	>Example 1: |calendarNew repeat 23/10/2021 Sumomo's birthday
+	>Example 2: |calendarNew 5/2/2021 one-time-only top-secret meeting
+-	|calendarCheck [days]
+	>Use it to see the upcoming events in the following [days]. If you skip the [days] value, this will be 15 by default.
+-	|calendarChannel [text-channel ID]
+	>Set a text-channel ID so Sumomo can remind of upcoming events daily on that text-channel.	
+-	|calendarTimezone [-12 to 12]
+	>Set a particular timezone for the calendar. -12 to 12 only so far. If you are outside this range, contact me and I'll work it out :)
+-	|calendarHelp
+	> Get a explanation of the calendar commands.
+
 ## Modules
 
 -   music
 
-> Allows Sumomo to reproduce music from Youtube. Individual songs, playlists and search queries are allowed. Planned improvements: 1) more commands, such as |repeat; 2) support for Spotify.
+	> Allows Sumomo to reproduce music from Youtube. Individual songs, playlists and search queries are allowed. Planned improvements: 1) more commands, such as |repeat; 2) support for Spotify.
 
 -   participation
 
-> Sumomo responds to certain messages with her quirky mannerisms, such as when a user claims/divorces a character in Mudae. Planned improvements: more topics of conversation to react to.
+	> Sumomo responds to certain messages with her quirky mannerisms, such as when a user claims/divorces a character in Mudae. Planned improvements: more topics of conversation to react to.
 
 -   mudaeAlarm
 
-> Sumomo notifies subscribed users when their Mudae rolls and claims are reset. This notification is sent as an individual DM to each user. That means that if your rolls reset every hour at xx:15 minutes, you will get a DM from Sumomo as a reminder in that exact moment. Planned improvements: more intuitive way of changing the alarm settings. Multi-language support.
+	> Sumomo notifies subscribed users when their Mudae rolls and claims are reset. This notification is sent as an individual DM to each user. That means that if your rolls reset every hour at xx:15 minutes, you will get a DM from Sumomo as a reminder in that exact moment. Planned improvements: more intuitive way of changing the alarm settings. Multi-language support.
 
 -   friendship
 
-> Sumomo gains trust with people that participate in text/voice channels. When somebody she really likes joins a voice channel, she might send him a cute DM to welcome him. Planned improvements: more tangible ways for Sumomo to reward users.
+	> Sumomo gains trust with people that participate in text/voice channels. When somebody she really likes joins a voice channel, she might send him a cute DM to welcome him. Planned improvements: more tangible ways for Sumomo to reward users.
 
 -   cleaning
 
-> Maintenance module meant to erase Sumomo's old messages in DM channels. Those messages are meant to delete themselves after a period of time, but sometimes they fail to do so.
+	> Maintenance module meant to erase Sumomo's old messages in DM channels. Those messages are meant to delete themselves after a period of time, but sometimes they fail to do so.
+
+- [NEW] calendar
+	>Users register events, such as birthdays or get-togethers, into the calendar. 
+	
+	>If a text-channel id is provided, Sumomo will post the upcoming events on it everyday and the month's calendar.
+	
+	>Events, by default, get deleted the day after they occur. 
+	
+	>For yearly events such as birthdays, the repeat flag must be added to the command. Events with the "repeat" flag on will be rescheduled for the next year the day after they expire. 
+	
+	>	Users can adjust the time zone of the calendar so Sumomo can time the events more accurately.
 
 ## Developer notes
 
@@ -145,6 +180,9 @@ She is a small bot made with affection. I thought of adapting her to public use,
 ## Sumomo's future
 
 In the short term, my priorities are giving Sumomo more functionality, while keeping her working properly, fixing bugs and crashes that might spawn. I would like to add modules such as -calendar- (for planning events or reminding birthdays), -moderation- (for different kinds of unwanted content / roles administration) and some other social game for users to interact with each other, along with Sumomo.
+
+UPDATE 30/3/2021:
+> v5.5: calendar module introduced!
 
 
 # Thanks for using Sumomo

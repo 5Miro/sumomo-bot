@@ -24,7 +24,12 @@ module.exports = {
 		if (message.author.id == global.client.user.id || message.system) return;
 
 		// If a message starts with the prefix
-		if (message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
+		try {
+			if (message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
+		} catch (err) {
+			console.error("Exception in participation:\n" + err);
+			return;
+		}
 
 		// CONVERSATIONS based on context
 		CONVERSATIONS.forEach((element) => {
