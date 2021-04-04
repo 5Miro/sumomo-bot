@@ -135,7 +135,11 @@ client.on("message", async (message) => {
 	if (message.author.bot || message.system) return;
 
 	// If a message does not start with the prefix, return.
-	if (!message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
+	try {
+		if (!message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
+	} catch (err) {
+		return;
+	}
 
 	// Read the arguments of the command and separate them.
 	let args = message.content.substring(getCurrentServer(message.guild.id).config.prefix.length).split(/\s+/);
@@ -165,6 +169,8 @@ client.setInterval(() => {
 			client.servers.set(doc.guild_id, doc);
 		});
 	});
+	// Update activity
+	client.user.setActivity("|help in " + client.guilds.cache.size + " servers!", { type: "PLAYING" });
 }, globals.LOCAL_DATA_INTEGRITY_CHECK_INTERVAL);
 
 // Log in this bot.

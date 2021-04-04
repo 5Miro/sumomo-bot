@@ -30,7 +30,7 @@ module.exports = {
 
 				embed.addFields({ name: "\u200B", value: "\u200B" }).setFooter(strings.getSystemString("FOOTER", message.guild.id));
 
-				message.react("❤");
+				message.react("❤").catch((err) => {});
 				message.channel.send(embed).catch(console.error);
 			})
 			.catch((err) => {

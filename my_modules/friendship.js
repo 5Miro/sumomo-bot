@@ -70,7 +70,7 @@ module.exports = {
 		try {
 			if (getCurrentServer(message.guild.id) === undefined) return;
 		} catch (err) {
-			console.error("Exception in friendship module:\n" + err);
+			//console.error("Exception in friendship module:\n" + err);
 			return;
 		}
 
@@ -83,7 +83,7 @@ module.exports = {
 		// If there's at least 1 positive key word.
 		if (POSITIVE_KEY_WORDS.some((word) => message.content.toLowerCase().includes(word.toLowerCase()))) {
 			modifier = BONUS_GAIN;
-			message.react("❤");
+			message.react("❤").catch(err => {});
 		}
 		userController.updateFriendship(message.author.id, message.author.username, message.guild.id, modifier);
 	},
@@ -106,7 +106,7 @@ module.exports = {
 									});
 								})
 								.catch((err) => {
-									console.error("No se ha podido enviar el PM de friendship\n" + err);
+									//console.error("No se ha podido enviar el PM de friendship\n" + err);
 								});
 						})
 						.catch((err) => {

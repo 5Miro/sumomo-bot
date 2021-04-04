@@ -27,14 +27,14 @@ module.exports = {
 		try {
 			if (message.content.startsWith(getCurrentServer(message.guild.id).config.prefix)) return;
 		} catch (err) {
-			console.error("Exception in participation:\n" + err);
+			//console.error("Exception in participation:\n" + err);
 			return;
 		}
 
 		// CONVERSATIONS based on context
 		CONVERSATIONS.forEach((element) => {
 			if (element.input.test(message.content.toLowerCase())) {
-				message.react(element.reaction);
+				message.react(element.reaction).catch((err) => {});
 				message.channel.send(strings.getRandomString(element.output, message.guild.id));
 				if (element.gif) {
 					message.channel.send(getRandomGif(element.gif));

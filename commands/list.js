@@ -41,7 +41,7 @@ module.exports = {
 		if (serverQueue.songs.length > globals.LIST_MAX_LENGTH) {
 			embed.addField("...", strings.getModuleString("MUSIC", "QUEUE_LENGTH_EXCESS", message.guild.id));
 		}
-		message.react("👍");
+		message.react("👍").catch((err) => {});
 		// Edit the previous embed and return.
 		return temp.edit(embed);
 	},
