@@ -59,11 +59,15 @@ module.exports = {
 							});
 					}
 
+					// Get yesterday to delete/ reschedule a day old events.
+					let yesterday = new Date(date);
+					yesterday.setDate(yesterday.getUTCDate() - 1);
+
 					// Delete expired events on that server, if any.
-					deleteExpiredEvents(server.guild_id, date);
+					deleteExpiredEvents(server.guild_id, yesterday);
 
 					// Reschedule past events with the "repeat" flag on that server.
-					readEventBeforeDate(server.guild_id, date).then((events) => {
+					readEventBeforeDate(server.guild_id, yesterday).then((events) => {
 						// Loop through each event.
 						events.forEach((e) => {
 							// If repeat flag is on, reschedule event for next year.
@@ -99,25 +103,25 @@ module.exports = {
 	 * @param {*} daysAdvanced
 	 */
 	UpcomingEvents(guild_id, channel, fromDate, daysAdvanced) {
+		// Format date to erase hours, minutes and seconds: 00:00:00 only
+		let formattedDate = new Date(fromDate.getUTCFullYear(), fromDate.getUTCMonth(), fromDate.getUTCDate());
+
 		// Fetch upcoming events
-		readEventFromDate(guild_id, fromDate, daysAdvanced).then((events) => {
+		readEventFromDate(guild_id, formattedDate, daysAdvanced).then((events) => {
 			const embed = new Discord.MessageEmbed()
 				.setTitle(
 					strings.getModuleString("CALENDAR", "TODAY_IS", guild_id) +
-						strings.getModuleString("CALENDAR", "MONTHS", guild_id)[fromDate.getUTCMonth()] +
+						strings.getModuleString("CALENDAR", "MONTHS", guild_id)[formattedDate.getUTCMonth()] +
 						" " +
-						fromDate.getUTCDate()
+						formattedDate.getUTCDate()
 				)
 				.setDescription(strings.getModuleString("CALENDAR", "UPCOMING_EVENTS_TITLE", guild_id))
 				.setColor(globals.embed_color);
 
-			let today = new Date();
-			let formattedToday = new Date(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
-
 			events.forEach((e) => {
 				embed.addFields({
 					name:
-						e.date.getTime() === formattedToday.getTime()
+						e.date.getTime() === formattedDate.getTime()
 							? getModuleString("CALENDAR", "TODAY_TEXT", guild_id) + "  "
 							: "· " + getModuleString("CALENDAR", "MONTHS", guild_id)[e.date.getUTCMonth()] + " " + e.date.getUTCDate() + " ·",
 					value: "---> " + e.description,
