@@ -164,3 +164,33 @@ exports.setFriendshipAll = async (_value, _guild_id) => {
 			console.log("setFriendshipAll threw an exception" + err);
 		});
 };
+
+exports.createDDHero = async (user_id, guild_id, hero) => {
+	const user = await this.readUser(user_id, guild_id).then((doc) => {
+		doc.daemonDice.ddHero = hero;
+		doc.save();
+	});
+	return user;
+};
+
+exports.readDDHero = async (user_id, guild_id) => {
+	return this.readUser(user_id, guild_id).catch((err) => {
+		console.log(err);
+		return null;
+	});
+};
+
+exports.deleteDDHero = async (user_id, guild_id) => {
+	this.readUser(user_id, guild_id).then((doc) => {
+		doc.daemonDice.ddHero = null;
+		doc.save();
+	});
+};
+
+exports.updateDDHeroD20 = async (user_id, guild_id, d20) => {
+	this.readUser(user_id, guild_id).then((doc) => {
+		doc.daemonDice.ddHero.d20 = d20;
+		doc.markModified("daemonDice");
+		doc.save();
+	});
+};

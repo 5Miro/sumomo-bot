@@ -27,11 +27,14 @@ const guildSchema = new mongoose.Schema(
 				type: String,
 				default: "en",
 			},
+			daemonDice: {
+				reset_time: { type: Number, default: 0 },
+				channel_id: { type: String, default: null },
+			},
 		},
 		calendar: {
 			channel_id: { type: String, default: null },
 			time_zone: { type: Number, default: 0 },
-			events: [{ type: String, required: false, default: null }],
 		},
 	},
 	{

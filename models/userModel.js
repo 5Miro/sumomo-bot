@@ -29,6 +29,16 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		default: 0,
 	},
+	daemonDice: {
+		ddHero: {
+			type: Object,
+			default: null,
+		},
+		score: {
+			type: Number,
+			default: 0,
+		},
+	},
 });
 
 const User = mongoose.model("users", userSchema);
