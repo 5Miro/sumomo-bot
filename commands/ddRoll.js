@@ -1,5 +1,6 @@
 const { updateDDHeroD20 } = require("../controllers/userController");
 const { RollD20 } = require("../my_modules/daemonDice");
+const { getModuleString } = require("../strings");
 
 module.exports = {
 	name: "ddRoll",
@@ -7,6 +8,6 @@ module.exports = {
 	hidden: false,
 	execute(message) {
 		let d20 = RollD20(message.member.id, message.guild.id);
-		message.channel.send("You rolled a " + d20);
+		message.channel.send(getModuleString("DAEMON_DICE", "ROLLED_DICE", message.guild.id) + d20);
 	},
 };

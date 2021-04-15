@@ -8,10 +8,9 @@ module.exports = {
 	execute(message) {
 		readDDHero(message.member.id, message.guild.id).then((user) => {
 			let hero = user.daemonDice.ddHero;
-			const embed = GetHeroStatus(hero);
-			
+			const embed = GetHeroStatus(hero, message.guild.id);
 
-			message.react("❤").catch((err) => {});
+			message.react("🎲").catch((err) => {});
 			message.channel.send(embed).catch(console.error);
 		});
 	},

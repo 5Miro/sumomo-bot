@@ -136,6 +136,44 @@ const LANG_EN = {
 			CHANNEL_ID_SET: "Calendar's text-channel ID has been set succesfully (^ᗜ^)",
 			TIME_ZONE_SET: "Calendar's timezone has been updated succesfully (^ᗜ^)",
 		},
+		DAEMON_DICE: {
+			VICTORY: " and claimed his glory!",
+			VICTORY_AND_ITEM: " and claimed his glory!\nYour hero also found a ",
+			NOT_ENOUGH_ROOM_FOR_ITEM:
+				"\nYour hero had no space left to equip it so it was put in the bag. Use '|ddReplaceItem [slot]' to replace and old item in [slot] for the new item.",
+			RIP: "R.I.P.",
+			DEFEAT: " and met his/her final fate.",
+			DEFEAT_BY_DEATH: " faced Death Itself and met his/her final fate.",
+			HERO_STATUS: {
+				GLORY: "GLORY ",
+				LEGEND: "LEGEND",
+				IN_PARTY_WITH: "Party members:",
+				SLOT: "Slot ",
+				EQUIPMENT: "Equipment					-",
+				ACHIEVEMENTS: "Achievements					-",
+				TOTAL_CHANCE: "Total chance of survival: **",
+				BASE_CHANCE: "\n- Base chance: ",
+				DD_MODIFIER: "\n- Daemon Dice modifier: ",
+				ITEM_MODIFIER: "\n- Item modifier: ",
+				PARTY_MODIFIER: "\n- Party modifier: ",
+				FOOTER: "R.I.P.		(T_T)",
+			},
+			THE_END: {
+				PART_1: "Unbelievable!, ",
+				PART_2: " has cheated Death Itself.\n\n<@",
+				PART_3:
+					">, your hero has become a living **LEGEND**✨.\n\nYou wave goodbye to your friend, now retired and with his/her thirst for Glory finally sated.\n\nTurns out there was more to Life than glory on Death.\n\n**THE END**",
+			},
+			CHANNEL_UPDATED: "Daemon Dice text-channel ID has been set succesfully (^ᗜ^)",
+			ERROR: {
+				NO_NAME: "Your hero must have a name! ᕙ(`▽´)ᕗ",
+			},
+			NEW_HERO: {
+				PART_1: ": a new hero named ",
+				PART_2: " has been assigned to your care.",
+			},
+			ROLLED_DICE: "You rolled a ",
+		},
 	},
 };
 
@@ -273,6 +311,44 @@ const LANG_ES = {
 			},
 			CHANNEL_ID_SET: "El ID del canal de texto para el calendario se ha configurado con éxito (^ᗜ^)",
 			TIME_ZONE_SET: "La zona horaria del calendario ha sido actualiza con éxito (^ᗜ^)",
+		},
+		DAEMON_DICE: {
+			VICTORY: " y reclamó su gloria!",
+			VICTORY_AND_ITEM: " y reclamó su gloria!\nTu héroe también encontró un/a ",
+			NOT_ENOUGH_ROOM_FOR_ITEM:
+				"\nTu héroe no tenía espacio para equipar el objeto, por lo que lo puso en su mochila. Usa '|ddReplaceItem [slot]' para reemplazar un objeto viejo en [slot] por el nuevo objeto.",
+			RIP: "R.I.P.",
+			DEFEAT: " y encontró su destino final.",
+			DEFEAT_BY_DEATH: " se enfrentó a la Muerte en persona y encontró su destino final.",
+			HERO_STATUS: {
+				GLORY: "GLORIA ",
+				LEGEND: "LEYENDA",
+				IN_PARTY_WITH: "Miembros del grupo:",
+				SLOT: "Espacio ",
+				EQUIPMENT: "Equipamiento					-",
+				ACHIEVEMENTS: "Logros 					-",
+				TOTAL_CHANCE: "Chance total de supervivencia: **",
+				BASE_CHANCE: "\n- Chance base: ",
+				DD_MODIFIER: "\n- Modificador de Daemon Dice: ",
+				ITEM_MODIFIER: "\n- Modificador de objetos: ",
+				PARTY_MODIFIER: "\n- Modificador de grupo: ",
+				FOOTER: "R.I.P.		(T_T)",
+			},
+			THE_END: {
+				PART_1: "Increíble!, ",
+				PART_2: " ha engañado a la Muerte en persona.\n\n<@",
+				PART_3:
+					">, tu héroe se ha convertido en una **LEYENDA**✨ viviente.\n\nTe despides de tu amigo, ahora retirado/a y con su sed de Gloria finalmente saciada.\n\nResulta que había más en la vida que Gloria en la Muerte.\n\n**EL FIN**",
+			},
+			CHANNEL_UPDATED: "El canal de texto de Daemon Dice se ha configurado con éxito (^ᗜ^)",
+			ERROR: {
+				NO_NAME: "Tu héroe debe tener un nombre! ᕙ(`▽´)ᕗ",
+			},
+			NEW_HERO: {
+				PART_1: ": un nuevo héroe llamado ",
+				PART_2: " ha sido asignado a tu cuidado.",
+			},
+			ROLLED_DICE: "Has tirado un ",
 		},
 	},
 };

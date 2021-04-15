@@ -1,4 +1,5 @@
 const { readGuild } = require("../controllers/guildController");
+const { getModuleString } = require("../strings");
 module.exports = {
 	name: "ddChannel",
 	descrip: ["(ADMIN) Set text-channel ID for Daemon Dice records", "(ADMIN) Configura el canal de texto donde se enviarán los records del Daemon Dice"],
@@ -22,7 +23,8 @@ module.exports = {
 				// Update local Collection.
 				client.servers.set(message.guild.id, updated);
 				// Let know that changes were succesful.
-				message.channel.send("Channel id updated");
+				message.react("🎲").catch((err) => {});
+				message.channel.send(getModuleString("DAEMON_DICE", "CHANNEL_UPDATED", message.guild.id));
 			});
 		});
 	},

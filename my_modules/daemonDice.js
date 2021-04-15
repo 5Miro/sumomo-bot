@@ -20,7 +20,7 @@ const { User } = require("discord.js");
 const { updateDDHeroD20, readAllFromGuild } = require("../controllers/userController");
 const Discord = require("discord.js");
 const globals = require("../globals");
-const { getSystemString } = require("../strings");
+const { getSystemString, getModuleString } = require("../strings");
 
 /**
  * COMMANDS:
@@ -39,6 +39,7 @@ const CRIT_BAD_PENALTY = -5;
 const QUEST_BASE_EXPANSION_SIZE = 100;
 const ITEM_BASE_EXPANSION_SIZE = 100;
 const MIN_ROLL_FOR_ITEM = 4;
+const PARTY_BONUS = [0, 5, 12];
 
 module.exports = {
 	name: "daemonDice",
@@ -53,7 +54,7 @@ module.exports = {
 		// Check reset time for each guild
 		guilds.forEach((server) => {
 			// if it's reset time
-			if (date.getUTCSeconds() % 30 === 0) {
+			if (date.getUTCSeconds() % 5 === 0) {
 				// get all users that belong to this server
 				readAllFromGuild(server.guild_id).then((users) => {
 					users.forEach((user) => {
@@ -83,18 +84,19 @@ module.exports = {
 									// Hero gains 1 glory point.
 									user.daemonDice.ddHero.glory++;
 
-									// Check if max glory
+									// Check if more than max glory
 									if (user.daemonDice.ddHero.glory > MAX_GLORY) {
 										user.daemonDice.ddHero.glory = MAX_GLORY;
+										// If hero has more than max glory, then player beated the game
 										global.client.channels
 											.fetch(server.config.daemonDice.channel_id)
 											.then((channel) => {
 												channel.send(
-													"Unbelievable!, " +
+													getModuleString("DAEMON_DICE", "THE_END", user.guild_id).PART_1 +
 														user.daemonDice.ddHero.name +
-														" has cheated Death Itself.\n\n<@" +
+														getModuleString("DAEMON_DICE", "THE_END", user.guild_id).PART_2 +
 														user.user_id +
-														">, your hero has become a living **LEGEND**✨.\n\nYou wave goodbye to your friend, now retired and with his/her thirst for Glory finally sated.\n\nTurns out there was more to Life than glory on Death.\n\n**THE END**"
+														getModuleString("DAEMON_DICE", "THE_END", user.guild_id).PART_3
 												);
 											})
 											.catch((err) => {
@@ -158,7 +160,7 @@ module.exports = {
 														user.daemonDice.ddHero.name +
 															" " +
 															this.GetEncounterString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
-															" and claimed his glory!\nYour hero also found a " +
+															getModuleString("DAEMON_DICE", "VICTORY_AND_ITEM", user.guild_id) +
 															this.GetItemString(newItemIndex) +
 															" +" +
 															user.daemonDice.ddHero.itemLevel[slot]
@@ -168,11 +170,11 @@ module.exports = {
 														user.daemonDice.ddHero.name +
 															" " +
 															this.GetEncounterString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
-															" and claimed his glory!\nYour hero also found a " +
+															getModuleString("DAEMON_DICE", "VICTORY_AND_ITEM", user.guild_id) +
 															this.GetItemString(newItemIndex) +
 															" +" +
 															user.daemonDice.ddHero.itemLevel[slot] +
-															"\nYour hero had no space left to equip it so it was put in the bag. Use '|ddReplaceItem [slot]' to replace and old item in [slot] for the new item."
+															getModuleString("DAEMON_DICE", "NOT_ENOUGH_ROOM_FOR_ITEM", user.guild_id)
 													);
 												}
 											} else {
@@ -180,7 +182,7 @@ module.exports = {
 													user.daemonDice.ddHero.name +
 														" " +
 														this.GetEncounterString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
-														" and claimed his glory!"
+														getModuleString("DAEMON_DICE", "VICTORY", user.guild_id)
 												);
 											}
 										});
@@ -197,7 +199,9 @@ module.exports = {
 													// if channel exists, send message
 													if (user.daemonDice.ddHero.glory === MAX_GLORY) {
 														channel.send(
-															"R.I.P.\n" + user.daemonDice.ddHero.name + " faced Death Itself and met his/her final fate."
+															"R.I.P.\n" +
+																user.daemonDice.ddHero.name +
+																getModuleString("DAEMON_DICE", "DEFEAT_BY_DEATH", user.guild_id)
 														);
 													} else {
 														channel.send(
@@ -205,7 +209,7 @@ module.exports = {
 																user.daemonDice.ddHero.name +
 																" quest n°: " +
 																questIndex +
-																" and met his/her final fate."
+																getModuleString("DAEMON_DICE", "DEFEAT", user.guild_id)
 														);
 													}
 												})
@@ -233,7 +237,7 @@ module.exports = {
 		// d20 is added as %; unless player rolled a 1, in which case value is actually a fixed penalty
 		let d20Modifier = module.exports.GetDDModifierChance(d20);
 		let itemModifier = module.exports.GetItemModifierChance(itemLevel);
-		return module.exports.GetBaseChance(glory) + d20Modifier + itemModifier;
+		return module.exports.GetBaseChance(glory) + d20Modifier + itemModifier + 5000;
 	},
 	RollD20(user_id, guild_id) {
 		// Roll dice.
@@ -257,31 +261,45 @@ module.exports = {
 	GetItemModifierChance(itemLevel) {
 		return itemLevel.reduce((accumulator, currentValue, i) => (currentValue !== -1 && i !== MAX_ITEMS ? accumulator + currentValue : accumulator), 0);
 	},
+	GetPartyModifierChance(hero) {
+		return PARTY_BONUS[hero.party.length];
+	},
 	GetDDModifierChance(d20) {
 		return d20 === 1 ? CRIT_BAD_PENALTY : d20 === -1 ? 0 : d20;
 	},
-	GetHeroStatus(hero) {
+	GetHeroStatus(hero, guild_id) {
 		const embed = new Discord.MessageEmbed().setTitle(hero.name.toUpperCase());
 
 		if (!hero.legend) {
-			embed.setDescription("GLORY " + hero.glory);
+			embed.setDescription(getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).GLORY + hero.glory);
 		} else {
-			embed.setDescription("LEGEND");
+			embed.setDescription(getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).LEGEND);
+		}
+		if (hero.party) {
+			if (hero.party.length !== 0) {
+				let partyString = "";
+				hero.party.forEach((member) => {
+					partyString = partyString.concat(member + "\n");
+				});
+				embed.addFields({ name: getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).IN_PARTY_WITH, value: partyString });
+			}
 		}
 		embed.addFields({ name: "\u200B", value: "\u200B" });
 		let equipmentString = "";
 		hero.itemIndex.forEach((item, i) => {
 			if (item !== -1 && i !== MAX_ITEMS) {
-				equipmentString = equipmentString.concat("Slot " + (i + 1) + ":\n	--  " + item + " (+" + hero.itemLevel[i] + ")\n\n");
+				equipmentString = equipmentString.concat(
+					getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).SLOT + (i + 1) + ":\n	--  " + item + " (+" + hero.itemLevel[i] + ")\n\n"
+				);
 			}
 		});
 		if (equipmentString !== "") {
-			embed.addFields({ name: "Equipment					-", value: equipmentString, inline: true });
+			embed.addFields({ name: getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).EQUIPMENT, value: equipmentString, inline: true });
 		}
 
 		let questString = hero.quests.join("\n\n");
 		if (questString !== "") {
-			embed.addFields({ name: "Achievements					-", value: questString, inline: true });
+			embed.addFields({ name: getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).ACHIEVEMENTS, value: questString, inline: true });
 		}
 
 		embed.addFields({ name: "\u200B", value: "\u200B" });
@@ -289,21 +307,24 @@ module.exports = {
 		if (!hero.dead) {
 			if (!hero.legend)
 				embed.setFooter(
-					"Total chance of survival: **" +
+					getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).TOTAL_CHANCE +
 						module.exports.GetSurvivalChance(hero.glory, hero.d20, hero.itemLevel) +
 						"%**" +
-						"\n- Base chance: " +
+						getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).BASE_CHANCE +
 						module.exports.GetBaseChance(hero.glory) +
 						"%" +
-						"\n- Daemon Dice modifier: " +
+						getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).DD_MODIFIER +
 						module.exports.GetDDModifierChance(hero.d20) +
 						"%" +
-						"\n- Item modifier: " +
+						getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).ITEM_MODIFIER +
 						module.exports.GetItemModifierChance(hero.itemLevel) +
+						"%" +
+						getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).PARTY_MODIFIER +
+						module.exports.GetPartyModifierChance(hero) +
 						"%"
 				);
 		} else {
-			embed.setFooter("R.I.P.		(T_T)");
+			embed.setFooter(getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).FOOTER);
 		}
 
 		embed
@@ -323,5 +344,6 @@ class DDHero {
 		this.dead = false;
 		this.quests = [];
 		this.legend = false;
+		this.party = [];
 	}
 }
