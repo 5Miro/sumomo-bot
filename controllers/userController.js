@@ -168,6 +168,7 @@ exports.setFriendshipAll = async (_value, _guild_id) => {
 exports.createDDHero = async (user_id, guild_id, hero) => {
 	const user = await this.readUser(user_id, guild_id).then((doc) => {
 		doc.daemonDice.ddHero = hero;
+		doc.daemonDice.rolls_left = globals.ROLLS_PER_QUEST;
 		doc.save();
 	});
 	return user;
@@ -193,4 +194,22 @@ exports.updateDDHeroD20 = async (user_id, guild_id, d20) => {
 		doc.markModified("daemonDice");
 		doc.save();
 	});
+};
+
+exports.spendMomocoins = async (user_id, guild_id, cost) => {
+	return await this.readUser(user_id, guild_id)
+		.then((user) => {
+			user.momocoins -= cost;
+			return user
+				.save()
+				.then((res) => {
+					return { success: true, cost: cost }; // money spent
+				})
+				.catch((err) => {
+					return { success: false, error: err }; // not enough funds
+				});
+		})
+		.catch((err) => {
+			return { success: false, error: err }; // user not found, maybe
+		});
 };

@@ -21,4 +21,7 @@ module.exports = {
 
 	// CALENDAR
 	DEFAULT_DAYS_IN_ADVANCE: 15,
+
+	// DAEMON DICE
+	ROLLS_PER_QUEST: 3,
 };

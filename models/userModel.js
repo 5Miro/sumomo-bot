@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		default: 0,
 	},
+	momocoins: {
+		type: Number,
+		default: 0,
+		min: 0,
+	},
 	daemonDice: {
 		ddHero: {
 			type: Object,
@@ -37,6 +42,11 @@ const userSchema = new mongoose.Schema({
 		score: {
 			type: Number,
 			default: 0,
+			min: 0,
+		},
+		rolls_left: {
+			type: Number,
+			default: globals.ROLLS_PER_QUEST,
 		},
 	},
 });

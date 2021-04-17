@@ -136,6 +136,12 @@ const LANG_EN = {
 			CHANNEL_ID_SET: "Calendar's text-channel ID has been set succesfully (^ᗜ^)",
 			TIME_ZONE_SET: "Calendar's timezone has been updated succesfully (^ᗜ^)",
 		},
+		MOMOCOINS: {
+			GAIN_COINS: " obtained ",
+			SPEND_COINS: " spent ",
+			CURRENT_COINS: ", you have ",
+			NOT_ENOUGH_COINS: ", you don't have enough Momocoins for that (စ_စ)",
+		},
 		DAEMON_DICE: {
 			VICTORY: " and claimed his glory!",
 			VICTORY_AND_ITEM: " and claimed his glory!\nYour hero also found a ",
@@ -156,7 +162,8 @@ const LANG_EN = {
 				DD_MODIFIER: "\n- Daemon Dice modifier: ",
 				ITEM_MODIFIER: "\n- Item modifier: ",
 				PARTY_MODIFIER: "\n- Party modifier: ",
-				FOOTER: "R.I.P.		(T_T)",
+				FOOTER_DEAD: "R.I.P.		(T_T)",
+				FOOTER_LEGEND: "Retired		 (^ᗜ^)",
 			},
 			THE_END: {
 				PART_1: "Unbelievable!, ",
@@ -172,7 +179,12 @@ const LANG_EN = {
 				PART_1: ": a new hero named ",
 				PART_2: " has been assigned to your care.",
 			},
-			ROLLED_DICE: "You rolled a ",
+			ROLLED_DICE: " rolled a ",
+			DICE_LEFT: "\nExtra rolls left: ",
+			NO_DICE_LEFT:
+				", you have no rolls left. You can roll up to " + globals.ROLLS_PER_QUEST + " dice per quest. A new roll overwrites your previous result.",
+			NO_HERO: ", you have no hero assigned! ᕙ(`▽´)ᕗ",
+			ROLL_COST: "The cost of rolling the Daemon Dice again is ",
 		},
 	},
 };
@@ -312,6 +324,12 @@ const LANG_ES = {
 			CHANNEL_ID_SET: "El ID del canal de texto para el calendario se ha configurado con éxito (^ᗜ^)",
 			TIME_ZONE_SET: "La zona horaria del calendario ha sido actualiza con éxito (^ᗜ^)",
 		},
+		MOMOCOINS: {
+			GAIN_COINS: " obtuvo ",
+			SPEND_COINS: " gastó ",
+			CURRENT_COINS: ", tienes ",
+			NOT_ENOUGH_COINS: ", no tienes suficientes Momocoins para eso (စ_စ)",
+		},
 		DAEMON_DICE: {
 			VICTORY: " y reclamó su gloria!",
 			VICTORY_AND_ITEM: " y reclamó su gloria!\nTu héroe también encontró un/a ",
@@ -332,7 +350,8 @@ const LANG_ES = {
 				DD_MODIFIER: "\n- Modificador de Daemon Dice: ",
 				ITEM_MODIFIER: "\n- Modificador de objetos: ",
 				PARTY_MODIFIER: "\n- Modificador de grupo: ",
-				FOOTER: "R.I.P.		(T_T)",
+				FOOTER_DEAD: "R.I.P.		(T_T)",
+				FOOTER_LEGEND: "Retirado		 (^ᗜ^)",
 			},
 			THE_END: {
 				PART_1: "Increíble!, ",
@@ -348,7 +367,14 @@ const LANG_ES = {
 				PART_1: ": un nuevo héroe llamado ",
 				PART_2: " ha sido asignado a tu cuidado.",
 			},
-			ROLLED_DICE: "Has tirado un ",
+			ROLLED_DICE: " ha tirado un ",
+			DICE_LEFT: "\nTiradas extra restantes: ",
+			NO_DICE_LEFT:
+				", no te quedan tiradas. Puedes tirar hasta " +
+				globals.ROLLS_PER_QUEST +
+				" dados por aventura. Una nueva tirada sobreescribe a la tirada anterior.",
+			NO_HERO: ", no tienes un héroe asignado! ᕙ(`▽´)ᕗ",
+			ROLL_COST: "Tirar de nuevo el dado Daemon cuesta ",
 		},
 	},
 };
