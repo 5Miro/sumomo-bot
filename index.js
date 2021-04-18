@@ -53,7 +53,7 @@ const commandFiles = fs.readdirSync("./commands/").filter((file) => file.endsWit
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
-	client.commands.set(command.name, command);
+	client.commands.set(command.name.toLowerCase(), command);
 }
 
 //////////////////////////////
@@ -144,9 +144,11 @@ client.on("message", async (message) => {
 	// Read the arguments of the command and separate them.
 	let args = message.content.substring(getCurrentServer(message.guild.id).config.prefix.length).split(/\s+/);
 
+	let cmdName = args[0].toLowerCase();
+
 	// If command exists
-	if (client.commands.get(args[0])) {
-		client.commands.get(args[0]).execute(message); // execute it
+	if (client.commands.get(cmdName)) {
+		client.commands.get(cmdName).execute(message); // execute it
 	} else {
 		// No command found.
 		//message.channel.send(strings.CMD_NOT_FOUND[Math.floor(Math.random() * strings.CMD_NOT_FOUND.length)]);

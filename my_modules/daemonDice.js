@@ -44,6 +44,7 @@ const COINS_PER_GLORY = 50;
 const COIN_VARIATION_PER_GLORY = 5;
 const END_GAME_BONUS = 500;
 const EXTRA_ROLL_COST = 20;
+const FINAL_QUEST_INDEX = 100;
 
 module.exports = {
 	name: "daemonDice",
@@ -58,7 +59,7 @@ module.exports = {
 		// Check reset time for each guild
 		guilds.forEach((server) => {
 			// if it's reset time
-			if (date.getUTCMinutes() === 0 + server.config.daemonDice.reset_time || date.getUTCSeconds() % 30 === 0) {
+			if (date.getUTCMinutes() === 0 + server.config.daemonDice.reset_time && date.getUTCSeconds() === 0) {
 				// get all users that belong to this server
 				readAllFromGuild(server.guild_id).then((users) => {
 					users.forEach((user) => {
@@ -72,7 +73,15 @@ module.exports = {
 								// Get random quest. Cannot repeat quest.
 								let repeated = true;
 								let questIndex = -1;
+
+								// if Glory is max glory, then final quest is always FINAL_QUEST_INDEX
+								if (user.daemonDice.ddHero.glory === MAX_GLORY) {
+									repeated = false;
+									questIndex = FINAL_QUEST_INDEX;
+								}
+
 								while (repeated) {
+									// Get a random quest index from 0 to EXPANSION_SIZE
 									questIndex = parseInt(Math.random() * QUEST_BASE_EXPANSION_SIZE);
 									// Filter hero quest array to verify that hero has not done that quest before.
 									if (user.daemonDice.ddHero.quests.filter((index) => index === questIndex).length === 0) {
@@ -83,9 +92,9 @@ module.exports = {
 								user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 1] = questIndex;
 
 								// Roll check
-								let random = Math.random() * 100;
-								let chance = this.GetSurvivalChance(user.daemonDice.ddHero.glory, user.daemonDice.ddHero.d20, user.daemonDice.ddHero.itemLevel);
-								let success = chance > random;
+								let random = parseInt(Math.random() * 100); // Get random chance of dying from 0% to 99%
+								let chance = this.GetSurvivalChance(user.daemonDice.ddHero);
+								let success = chance > random; // If chance of survival is bigger than chance of dying, then quest is succesful
 
 								// If hero survives
 								if (success) {
@@ -97,7 +106,7 @@ module.exports = {
 										user.daemonDice.ddHero.glory = MAX_GLORY;
 										user.daemonDice.ddHero.legend = true;
 										// Award coins to user
-										let coins = this.GetMomoCoins(user.daemonDice.ddHero);
+										let coins = this.GetMomocoins(user.daemonDice.ddHero);
 										user.momocoins += coins;
 										user.markModified("daemonDice");
 										user.save().then((result) => {
@@ -126,23 +135,27 @@ module.exports = {
 										return;
 									}
 
-									// Hero gains a new item. Cannot repeat item.
-									let newItemIndex = -1;
-									let repeated = true;
-									// Try to equip it
-									let equipped = false;
-									let slot = -1;
+									// Haven't finished the game yet.
 
+									// Some block scope variables
+									let newItemIndex = -1; // index of the new item
+									let repeated = true; // flag for the while loop that get an index
+									let equipped = false; // flag to know whether the item was equipped or not
+									let slot = -1; // index of the equipped item
+
+									// Hero gains a new item. Cannot repeat item.
 									// If daemon dice was bigger than MIN_ROLL_FOR_ITEM
 									if (user.daemonDice.ddHero.d20 >= MIN_ROLL_FOR_ITEM) {
 										while (repeated) {
 											newItemIndex = parseInt(Math.random() * ITEM_BASE_EXPANSION_SIZE);
 											// Filter hero record to verify that hero has not done that quest before.
 											if (user.daemonDice.ddHero.itemIndex.filter((index) => index === newItemIndex).length === 0) {
+												// we got an item, now break the loop.
 												repeated = false;
 											}
 										}
 
+										// Try to equip the item
 										for (let i = 0; i < MAX_ITEMS; i++) {
 											// if slot is empty
 											if (user.daemonDice.ddHero.itemIndex[i] === -1) {
@@ -154,15 +167,14 @@ module.exports = {
 											//If no slot is available, item won't be equipped.
 										}
 
+										// If not enough space for item, store it in extra slot
 										if (!equipped) {
 											// Store extra item in extra slot. This is not equipped
 											user.daemonDice.ddHero.itemIndex[MAX_ITEMS] = newItemIndex;
-											user.daemonDice.ddHero.itemLevel[MAX_ITEMS] = parseInt(user.daemonDice.ddHero.d20 / 4);
-											slot = [MAX_ITEMS - 1];
-										} else {
-											// Item level depends on d20. Max item level is 5
-											user.daemonDice.ddHero.itemLevel[slot] = parseInt(user.daemonDice.ddHero.d20 / 4);
+											slot = [MAX_ITEMS];
 										}
+										// Item level depends on d20. Max item level is 5
+										user.daemonDice.ddHero.itemLevel[slot] = parseInt(user.daemonDice.ddHero.d20 / 4);
 									}
 
 									// Set d20 back to -1
@@ -172,22 +184,26 @@ module.exports = {
 									user.save().then((updated) => {
 										// Send PM to the user
 										client.users.fetch(user.user_id).then((res) => {
+											// If previous roll was enough for an item.
 											if (previousDD >= MIN_ROLL_FOR_ITEM) {
+												// If said item was equipped
 												if (equipped) {
 													res.send(
 														user.daemonDice.ddHero.name +
 															" " +
-															this.GetEncounterString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
+															this.GetQuestString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
 															getModuleString("DAEMON_DICE", "VICTORY_AND_ITEM", user.guild_id) +
 															this.GetItemString(newItemIndex) +
 															" +" +
 															user.daemonDice.ddHero.itemLevel[slot]
 													);
-												} else {
+												}
+												// Item was not equipped, but it's available for replacement
+												else {
 													res.send(
 														user.daemonDice.ddHero.name +
 															" " +
-															this.GetEncounterString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
+															this.GetQuestString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
 															getModuleString("DAEMON_DICE", "VICTORY_AND_ITEM", user.guild_id) +
 															this.GetItemString(newItemIndex) +
 															" +" +
@@ -195,11 +211,13 @@ module.exports = {
 															getModuleString("DAEMON_DICE", "NOT_ENOUGH_ROOM_FOR_ITEM", user.guild_id)
 													);
 												}
-											} else {
+											}
+											// Hero did not get a new item.
+											else {
 												res.send(
 													user.daemonDice.ddHero.name +
 														" " +
-														this.GetEncounterString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
+														this.GetQuestString(user.daemonDice.ddHero.quests[user.daemonDice.ddHero.glory - 2]) +
 														getModuleString("DAEMON_DICE", "VICTORY", user.guild_id)
 												);
 											}
@@ -209,8 +227,8 @@ module.exports = {
 									// Hero died, send post record to text-channel
 									user.daemonDice.ddHero.dead = true;
 
-									// Award coins to user
-									let coins = this.GetMomoCoins(user.daemonDice.hero);
+									// Award coins to user depending on hero achievements.
+									let coins = this.GetMomocoins(user.daemonDice.ddHero);
 									user.momocoins += coins;
 
 									user.markModified("daemonDice");
@@ -220,6 +238,8 @@ module.exports = {
 												.fetch(server.config.daemonDice.channel_id)
 												.then((channel) => {
 													// if channel exists, send message
+
+													// If hero was killed on his last quest
 													if (user.daemonDice.ddHero.glory === MAX_GLORY) {
 														channel.send(
 															"R.I.P.\n" +
@@ -266,40 +286,101 @@ module.exports = {
 
 	OnVoiceStateUpdate(oldState, newState) {},
 
-	GetSurvivalChance(glory, d20, itemLevel) {
+	/**
+	 * Returns a numeric value that represents the chance of survival of a hero.
+	 * @param {*} hero
+	 * @returns
+	 */
+	GetSurvivalChance(hero) {
 		// d20 is added as %; unless player rolled a 1, in which case value is actually a fixed penalty
-		let d20Modifier = module.exports.GetDDModifierChance(d20);
-		let itemModifier = module.exports.GetItemModifierChance(itemLevel);
-		return module.exports.GetBaseChance(glory) + d20Modifier + itemModifier;
+		let d20Modifier = module.exports.GetDDModifierChance(hero.d20);
+		let itemModifier = module.exports.GetItemModifierChance(hero.itemLevel);
+		let partyModifier = module.exports.GetPartyModifierChance(hero);
+		return module.exports.GetBaseChance(hero.glory) + d20Modifier + itemModifier + partyModifier;
 	},
+	/**
+	 * Rolls a dice, updates value in DB and returns said value.
+	 * @param {*} user_id
+	 * @param {*} guild_id
+	 * @returns
+	 */
 	RollD20(user_id, guild_id) {
 		// Roll dice.
-		let d20 = parseInt(Math.random() * 20 + 1);
+		let d20 = parseInt(Math.random() * 20) + 1;
 		// Set value into DB.
 		updateDDHeroD20(user_id, guild_id, d20);
+		// return result.
 		return d20;
 	},
+	/**
+	 * Returns a new Hero object with a name.
+	 * @param {*} name
+	 * @returns
+	 */
 	CreateHero(name) {
 		return new DDHero(name);
 	},
-	GetEncounterString(index) {
+
+	/**
+	 * Gets Quest string from index.
+	 * @param {*} index
+	 * @returns
+	 */
+	GetQuestString(index) {
 		return "quest " + index;
 	},
+
+	/**
+	 * Gets Item string from index.
+	 * @param {*} index
+	 * @returns
+	 */
 	GetItemString(index) {
 		return "item " + index;
 	},
+
+	/**
+	 * Gets survival chance based on glory value.
+	 * @param {*} glory
+	 * @returns
+	 */
 	GetBaseChance(glory) {
 		return CHANCE_PER_GLORY[glory - 1];
 	},
+
+	/**
+	 * Gets Item bonus chance of survival based on item level.
+	 * @param {*} itemLevel
+	 * @returns
+	 */
 	GetItemModifierChance(itemLevel) {
 		return itemLevel.reduce((accumulator, currentValue, i) => (currentValue !== -1 && i !== MAX_ITEMS ? accumulator + currentValue : accumulator), 0);
 	},
+
+	/**
+	 * Gets party bonus chance of survival based on party length.
+	 * @param {*} hero
+	 * @returns
+	 */
 	GetPartyModifierChance(hero) {
 		return PARTY_BONUS[hero.party.length];
 	},
+
+	/**
+	 * Gets chance of survival based on Daemon Dice result.
+	 * @param {*} d20
+	 * @returns
+	 */
 	GetDDModifierChance(d20) {
 		return d20 === 1 ? CRIT_BAD_PENALTY : d20 === -1 ? 0 : d20;
 	},
+
+	/**
+	 * Get a Discord embed with hero's stats.
+	 * @param {*} hero
+	 * @param {*} guild_id
+	 * @returns
+	 */
 	GetHeroStatus(hero, guild_id) {
 		const embed = new Discord.MessageEmbed().setTitle(hero.name.toUpperCase());
 
@@ -343,7 +424,7 @@ module.exports = {
 				// HERO IS ACTIVE
 				embed.setFooter(
 					getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).TOTAL_CHANCE +
-						module.exports.GetSurvivalChance(hero.glory, hero.d20, hero.itemLevel) +
+						module.exports.GetSurvivalChance(hero) +
 						"%**" +
 						getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).BASE_CHANCE +
 						module.exports.GetBaseChance(hero.glory) +
@@ -372,14 +453,28 @@ module.exports = {
 			.setAuthor("Daemon Dice", "https://cdn.icon-icons.com/icons2/1465/PNG/512/678gamedice_100992.png", "https://top.gg/bot/769338863947743274");
 		return embed;
 	},
-	GetMomoCoins(hero) {
+
+	/**
+	 * Returns a value in Momocoins based on hero's achievements.
+	 * @param {*} hero
+	 * @returns
+	 */
+	GetMomocoins(hero) {
 		let baseValue = hero.glory * COINS_PER_GLORY;
 		let randomVariation = Math.random() * COIN_VARIATION_PER_GLORY * hero.glory;
 		let gameOverBonus = hero.legend ? END_GAME_BONUS : 0;
 		return parseInt(baseValue + randomVariation + gameOverBonus);
 	},
+	/**
+	 * Returns the cost in Momocoins of rolling an extra dice based on roll's left.
+	 * @param {*} rollsLeft
+	 * @returns
+	 */
 	GetExtraRollCost(rollsLeft) {
 		return rollsLeft === globals.ROLLS_PER_QUEST ? 0 : EXTRA_ROLL_COST;
+	},
+	GetMaxPartySize() {
+		return PARTY_BONUS.length - 1;
 	},
 };
 

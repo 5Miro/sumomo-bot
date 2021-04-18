@@ -46,6 +46,8 @@ const LANG_EN = {
 		PERMISSION_ERROR: "-sama, you have no permissions to execute this command.",
 		AUTHOR: "developed by Miro",
 		FOOTER: "Thanks for trusting Sumomo!",
+		AFFIRMATIVE: "y",
+		NEGATIVE: "n",
 	},
 
 	COMMANDS: {
@@ -185,6 +187,16 @@ const LANG_EN = {
 				", you have no rolls left. You can roll up to " + globals.ROLLS_PER_QUEST + " dice per quest. A new roll overwrites your previous result.",
 			NO_HERO: ", you have no hero assigned! ᕙ(`▽´)ᕗ",
 			ROLL_COST: "The cost of rolling the Daemon Dice again is ",
+			PARTY: {
+				NO_TAG_ERROR: ", you must tag the user with whom you want to form a party with! ᕙ(`▽´)ᕗ",
+				SELF_PARTY_ERROR: ", you cannot invite yourself to a party! (စ ද စ)",
+				HERO_UNAVAILABLE: ", your hero cannot continue the adventure. You need a new one",
+				FULL_PARTY: ", your party is full!",
+				ALREADY_IN_PARTY: ", you are already in a party with that user (စ_စ)",
+				TIMEOUT: ", time is out. Your invitation wasn't answered",
+				DECLINED: ", user declined your invitation. Respectfully, of course (စ ද စ)",
+				ACCEPTED: " are now in a party! (ง '̀͜ '́ )ง",
+			},
 		},
 	},
 };
@@ -234,6 +246,8 @@ const LANG_ES = {
 		PERMISSION_ERROR: "-sama, no tiene permisos para ejecutar este comando.",
 		AUTHOR: "desarrollado por Miro",
 		FOOTER: "Gracias por confiar en Sumomo!",
+		AFFIRMATIVE: "s",
+		NEGATIVE: "n",
 	},
 
 	COMMANDS: {
@@ -375,6 +389,16 @@ const LANG_ES = {
 				" dados por aventura. Una nueva tirada sobreescribe a la tirada anterior.",
 			NO_HERO: ", no tienes un héroe asignado! ᕙ(`▽´)ᕗ",
 			ROLL_COST: "Tirar de nuevo el dado Daemon cuesta ",
+			PARTY: {
+				NO_TAG_ERROR: ", debes etiquetar al usuario con el que quieres formar un grupo! ᕙ(`▽´)ᕗ",
+				SELF_PARTY_ERROR: ", no puedes invitarte a ti mismo a un grupo! (စ ද စ)",
+				HERO_UNAVAILABLE: ", tu héroe no está disponible para la aventura. Necesitas uno nuevo",
+				FULL_PARTY: ", tu grupo está lleno!",
+				ALREADY_IN_PARTY: ", ya te encuentras en un grupo con ese usuario (စ_စ)",
+				TIMEOUT: ", se terminó el tiempo. Tu invitación no fue contestada",
+				DECLINED: ", el usuario declinó tu invitación. Respetuosamente, claro (စ ද စ)",
+				ACCEPTED: " han formado un grupo de Daemon Dice! (ง '̀͜ '́ )ง",
+			},
 		},
 	},
 };
