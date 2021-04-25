@@ -299,7 +299,7 @@ module.exports = {
 																" Momocoins"
 														);
 													}
-													const embed = GetHeroStatus(user.daemonDice.ddhero, message.guild.id);
+													const embed = GetHeroStatus(user.daemonDice.ddhero, user.guild.id);
 
 													channel.send(embed).catch(console.error);
 												})
@@ -430,7 +430,7 @@ module.exports = {
 			if (hero.party.length !== 0) {
 				let partyString = "";
 				hero.party.forEach((member) => {
-					partyString = partyString.concat(member + "\n");
+					partyString = partyString.concat(member.name + "\n");
 				});
 				embed.addFields({ name: getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).IN_PARTY_WITH, value: partyString });
 			}
@@ -506,7 +506,7 @@ module.exports = {
 	 * @returns
 	 */
 	GetMomocoins(hero) {
-		let baseValue = hero.glory * COINS_PER_GLORY;
+		let baseValue = (hero.glory + 1) * COINS_PER_GLORY;
 		let randomVariation = Math.random() * COIN_VARIATION_PER_GLORY * hero.glory;
 		let gameOverBonus = hero.legend ? END_GAME_BONUS : 0;
 		return parseInt(baseValue + randomVariation + gameOverBonus);

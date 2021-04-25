@@ -50,7 +50,8 @@ module.exports = {
 								getModuleString("MOMOCOINS", "NOT_ENOUGH_COINS", message.guild.id) +
 								"\n" +
 								getModuleString("DAEMON_DICE", "ROLL_COST", message.guild.id) +
-								GetExtraRollCost(user.daemonDice.rolls_left)
+								GetExtraRollCost(user.daemonDice.rolls_left) +
+								" Momocoins"
 						);
 					}
 				});

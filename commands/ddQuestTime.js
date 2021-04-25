@@ -1,5 +1,5 @@
 const { readGuild } = require("../controllers/guildController");
-const { getModuleString } = require("../strings");
+const { getModuleString, getSystemString } = require("../strings");
 
 const MIN_MINUTES = 0;
 const MAX_MINUTES = 59;
@@ -14,7 +14,7 @@ module.exports = {
 	execute(message) {
 		// User must be an admin.
 		if (!message.member.hasPermission("ADMINISTRATOR")) {
-			message.channel.send(message.author.username + strings.getSystemString("PERMISSION_ERROR", message.guild.id));
+			message.channel.send(message.author.username + getSystemString("PERMISSION_ERROR", message.guild.id));
 			return;
 		}
 

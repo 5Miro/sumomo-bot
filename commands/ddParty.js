@@ -2,6 +2,8 @@ const { readUser } = require("../controllers/userController");
 const { GetMaxPartySize } = require("../my_modules/daemonDice");
 const { getModuleString, getSystemString } = require("../strings");
 
+const PARTY_INVITATION_TIMEOUT = 30000;
+
 module.exports = {
 	name: "ddParty",
 	descrip: ["Invite a user to join your Daemon Dice party.", "Invita a un usuario a unirse a tu party de Daemon Dice."],
@@ -27,13 +29,18 @@ module.exports = {
 		// Fetch sender user
 		readUser(message.member.id, message.guild.id)
 			.then((user) => {
+				// if hero is null
+				if (user.daemonDice.ddHero === null) {
+					// hero cannot form a party
+					return message.channel.send(message.member.displayName + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).HERO_UNAVAILABLE);
+				}
 				// check if hero is available
 				if (user.daemonDice.ddHero.dead || user.daemonDice.ddHero.legend) {
 					// hero cannot form a party
 					return message.channel.send(message.member.displayName + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).HERO_UNAVAILABLE);
 				}
 				// check if target user is already in party with user
-				if (user.daemonDice.ddHero.party.some((id) => id === targetUserID)) {
+				if (user.daemonDice.ddHero.party.some((member) => member.id === targetUserID)) {
 					// this target user is already in a party with user
 					return message.channel.send(message.member.displayName + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).ALREADY_IN_PARTY);
 				}
@@ -44,7 +51,9 @@ module.exports = {
 					return message.channel.send(message.member.displayName + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).FULL_PARTY);
 				}
 
-				console.log("caca");
+				// send msg invite
+				message.channel.send(args[1] + ", " + message.member.displayName + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).INVITATION);
+
 				// user is available for party.
 				// Filter: only collect messages whose author is the tagged user. Also, messages should be either affirmative or negative (y/n)
 				let filter = (m) =>
@@ -54,7 +63,7 @@ module.exports = {
 
 				// Await for user's response.
 				message.channel
-					.awaitMessages(filter, { max: 1, time: 10000 })
+					.awaitMessages(filter, { max: 1, time: PARTY_INVITATION_TIMEOUT })
 					.then((collected) => {
 						// get msg
 						let msg = collected.array()[0];
@@ -65,6 +74,13 @@ module.exports = {
 							if (msg.content.toLowerCase() === getSystemString("AFFIRMATIVE", message.guild.id)) {
 								// fetch user from DB.
 								readUser(targetUserID, message.guild.id).then((targetUser) => {
+									// check if hero is null
+									if (targetUser.daemonDice.ddHero === null) {
+										// hero cannot form a party
+										return message.channel.send(
+											targetUser.username + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).HERO_UNAVAILABLE
+										);
+									}
 									// check if hero is available
 									if (targetUser.daemonDice.ddHero.dead || targetUser.daemonDice.ddHero.legend) {
 										// hero cannot form a party
@@ -73,7 +89,7 @@ module.exports = {
 										);
 									}
 									// check if target user is already in party with user
-									if (targetUser.daemonDice.ddHero.party.some((id) => id === message.member.id)) {
+									if (targetUser.daemonDice.ddHero.party.some((member) => member.id === message.member.id)) {
 										// this target user is already in a party with user
 										return message.channel.send(
 											targetUser.username + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).ALREADY_IN_PARTY
@@ -85,12 +101,18 @@ module.exports = {
 										return message.channel.send(targetUser.username + getModuleString("DAEMON_DICE", "PARTY", message.guild.id).FULL_PARTY);
 									}
 									// update party member in receiver
-									targetUser.daemonDice.ddHero.party[targetUser.daemonDice.ddHero.party.length] = message.member.id;
+									targetUser.daemonDice.ddHero.party[targetUser.daemonDice.ddHero.party.length] = {
+										id: message.member.id,
+										name: user.daemonDice.ddHero.name,
+									};
 									targetUser.markModified("daemonDice");
 									// save target user
 									targetUser.save().then((confirm1) => {
 										// if succesful, update party member in sender
-										user.daemonDice.ddHero.party[user.daemonDice.ddHero.party.length] = targetUserID;
+										user.daemonDice.ddHero.party[user.daemonDice.ddHero.party.length] = {
+											id: targetUserID,
+											name: targetUser.daemonDice.ddHero.name,
+										};
 										user.markModified("daemonDice");
 										user.save().then((confirm2) => {
 											// send confirmation message

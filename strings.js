@@ -156,7 +156,7 @@ const LANG_EN = {
 			HERO_STATUS: {
 				GLORY: "GLORY ",
 				LEGEND: "LEGEND",
-				IN_PARTY_WITH: "Party members:",
+				IN_PARTY_WITH: "Partner:",
 				SLOT: "Slot ",
 				EQUIPMENT: "Equipment: ",
 				ACHIEVEMENTS: "Achievements: ",
@@ -203,6 +203,7 @@ const LANG_EN = {
 				TIMEOUT: ", time is out. Your invitation wasn't answered",
 				DECLINED: ", user declined your invitation. Respectfully, of course (စ ද စ)",
 				ACCEPTED: " are now in a party! (ง '̀͜ '́ )ง",
+				INVITATION: " has invited you to form a party! (y/n)",
 			},
 			USER_HAS_HERO: ", you already have a hero assigned!",
 			QUESTS_1: [
@@ -518,7 +519,7 @@ const LANG_ES = {
 			HERO_STATUS: {
 				GLORY: "GLORIA ",
 				LEGEND: "LEYENDA",
-				IN_PARTY_WITH: "Miembros del grupo:",
+				IN_PARTY_WITH: "Compañero:",
 				SLOT: "Espacio ",
 				EQUIPMENT: "Equipamiento: ",
 				ACHIEVEMENTS: "Logros: ",
@@ -567,6 +568,7 @@ const LANG_ES = {
 				TIMEOUT: ", se terminó el tiempo. Tu invitación no fue contestada",
 				DECLINED: ", el usuario declinó tu invitación. Respetuosamente, claro (စ ද စ)",
 				ACCEPTED: " han formado un grupo de Daemon Dice! (ง '̀͜ '́ )ง",
+				INVITATION: " te ha invitado a formar un grupo! (s/n)",
 			},
 			USER_HAS_HERO: ", ya tienes un héroe asignado!",
 			QUESTS_1: [

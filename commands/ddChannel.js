@@ -1,5 +1,5 @@
 const { readGuild } = require("../controllers/guildController");
-const { getModuleString } = require("../strings");
+const { getModuleString, getSystemString } = require("../strings");
 module.exports = {
 	name: "ddChannel",
 	descrip: ["(ADMIN) Set text-channel ID for Daemon Dice records", "(ADMIN) Configura el canal de texto donde se enviarán los records del Daemon Dice"],
@@ -7,7 +7,7 @@ module.exports = {
 	execute(message) {
 		// User must be an admin.
 		if (!message.member.hasPermission("ADMINISTRATOR")) {
-			message.channel.send(message.author.username + strings.getSystemString("PERMISSION_ERROR", message.guild.id));
+			message.channel.send(message.author.username + getSystemString("PERMISSION_ERROR", message.guild.id));
 			return;
 		}
 
