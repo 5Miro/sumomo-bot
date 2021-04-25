@@ -299,6 +299,9 @@ module.exports = {
 																" Momocoins"
 														);
 													}
+													const embed = GetHeroStatus(user.daemonDice.ddhero, message.guild.id);
+
+													channel.send(embed).catch(console.error);
 												})
 												.catch((err) => {
 													// Channel ID is not valid.
