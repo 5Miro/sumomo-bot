@@ -28,7 +28,7 @@ const guildSchema = new mongoose.Schema(
 				default: "en",
 			},
 			daemonDice: {
-				reset_time: { type: Number, default: 0 },
+				reset_time: { type: Number, default: 0, min: 0, max: 59 },
 				channel_id: { type: String, default: null },
 			},
 		},

@@ -6,8 +6,7 @@ module.exports = {
 	descrip: ["Shows the status of your current hero.", "Muestra el estado de tu héroe actual."],
 	hidden: false,
 	execute(message) {
-		readDDHero(message.member.id, message.guild.id).then((user) => {
-			let hero = user.daemonDice.ddHero;
+		readDDHero(message.member.id, message.guild.id).then((hero) => {
 			const embed = GetHeroStatus(hero, message.guild.id);
 
 			message.react("🎲").catch((err) => {});

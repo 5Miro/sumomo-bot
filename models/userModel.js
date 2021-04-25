@@ -48,6 +48,10 @@ const userSchema = new mongoose.Schema({
 			type: Number,
 			default: globals.ROLLS_PER_QUEST,
 		},
+		dm: {
+			type: Boolean,
+			default: true,
+		},
 	},
 });
 

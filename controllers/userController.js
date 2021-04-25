@@ -175,10 +175,14 @@ exports.createDDHero = async (user_id, guild_id, hero) => {
 };
 
 exports.readDDHero = async (user_id, guild_id) => {
-	return this.readUser(user_id, guild_id).catch((err) => {
-		console.log(err);
-		return null;
-	});
+	return await this.readUser(user_id, guild_id)
+		.then((user) => {
+			return user.daemonDice.ddHero;
+		})
+		.catch((err) => {
+			console.log(err);
+			return null;
+		});
 };
 
 exports.deleteDDHero = async (user_id, guild_id) => {
