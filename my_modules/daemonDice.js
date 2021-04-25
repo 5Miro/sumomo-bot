@@ -299,7 +299,7 @@ module.exports = {
 																" Momocoins"
 														);
 													}
-													const embed = GetHeroStatus(user.daemonDice.ddhero, user.guild.id);
+													const embed = GetHeroStatus(user.daemonDice.ddhero, user.guild_id);
 
 													channel.send(embed).catch(console.error);
 												})
