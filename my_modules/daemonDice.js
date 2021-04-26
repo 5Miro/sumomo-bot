@@ -87,7 +87,7 @@ module.exports = {
 		// Check reset time for each guild
 		guilds.forEach((server) => {
 			// if it's reset time
-			if ((date.getUTCMinutes() === 0 + server.config.daemonDice.reset_time && date.getUTCSeconds() === 0) || date.getUTCSeconds() % 10 === 0) {
+			if (date.getUTCMinutes() === 0 + server.config.daemonDice.reset_time && date.getUTCSeconds() === 0) {
 				// get all users that belong to this server
 				readAllFromGuild(server.guild_id).then((users) => {
 					users.forEach((user) => {
@@ -333,7 +333,7 @@ module.exports = {
 		let d20Modifier = module.exports.GetDDModifierChance(hero.d20);
 		let itemModifier = module.exports.GetItemModifierChance(hero.itemLevel);
 		let partyModifier = module.exports.GetPartyModifierChance(hero);
-		return module.exports.GetBaseChance(hero.glory) + d20Modifier + itemModifier + partyModifier - 100;
+		return module.exports.GetBaseChance(hero.glory) + d20Modifier + itemModifier + partyModifier;
 	},
 	/**
 	 * Rolls a dice, updates value in DB and returns said value.
