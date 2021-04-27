@@ -16,6 +16,10 @@ module.exports = {
 			return;
 		}
 
+		let heroName = [...args];
+		heroName.splice(0, 1);
+		heroName = heroName.join(" ");
+
 		// check if user already has a hero
 		readDDHero(message.member.id, message.guild.id)
 			.then((hero) => {
@@ -26,7 +30,7 @@ module.exports = {
 				}
 
 				// create a hero
-				let newHero = CreateHero(args[1]);
+				let newHero = CreateHero(heroName);
 				// create hero in db and send msg.
 				createDDHero(message.member.id, message.guild.id, newHero).then((doc) => {
 					message.channel.send(

@@ -169,6 +169,7 @@ exports.createDDHero = async (user_id, guild_id, hero) => {
 	const user = await this.readUser(user_id, guild_id).then((doc) => {
 		doc.daemonDice.ddHero = hero;
 		doc.daemonDice.rolls_left = globals.ROLLS_PER_QUEST;
+		doc.daemonDice.created_characters++;
 		doc.save();
 	});
 	return user;

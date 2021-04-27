@@ -39,10 +39,13 @@ const userSchema = new mongoose.Schema({
 			type: Object,
 			default: null,
 		},
-		score: {
+		created_characters: {
 			type: Number,
 			default: 0,
-			min: 0,
+		},
+		game_overs: {
+			type: Number,
+			default: 0,
 		},
 		rolls_left: {
 			type: Number,

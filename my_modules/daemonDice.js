@@ -64,7 +64,7 @@ const MAX_GLORY = 9;
 const CHANCE_PER_GLORY = [90, 70, 60, 50, 40, 30, 25, 15, 10, -25]; //
 const MAX_ITEMS = 5;
 const CRIT_BAD_PENALTY = -5;
-const QUEST_BASE_EXPANSION_SIZE = 50;
+const QUEST_BASE_EXPANSION_SIZE = 100;
 const ITEM_BASE_EXPANSION_SIZE = 50;
 const MIN_ROLL_FOR_ITEM = 4;
 const PARTY_BONUS = [0, 5];
@@ -72,12 +72,15 @@ const COINS_PER_GLORY = 50;
 const COIN_VARIATION_PER_GLORY = 5;
 const END_GAME_BONUS = 500;
 const EXTRA_ROLL_COST = 20;
-const FINAL_QUEST_INDEX = 51;
+const FINAL_QUEST_INDEX = 101;
 
 module.exports = {
 	name: "daemonDice",
 	isActivated: true,
-	descrip: ["Dice RPG minigame. Help your hero reach glory in death!", "Minijuego de dados RPG. Ayuda a tu héroe a alcanzar la gloria en la muerte!"],
+	descrip: [
+		"Dice RPG minigame. Help your hero reach glory in a series of peculiar quests!",
+		"Minijuego de dados RPG. Ayuda a tu héroe a alcanzar la gloria en una serie de peculiares aventuras!",
+	],
 	OnInterval() {
 		// Get date
 		let date = new Date();
@@ -133,6 +136,7 @@ module.exports = {
 									if (user.daemonDice.ddHero.glory > MAX_GLORY) {
 										user.daemonDice.ddHero.glory = MAX_GLORY;
 										user.daemonDice.ddHero.legend = true;
+										user.daemonDice.game_overs++;
 										// Award coins to user
 										let coins = this.GetMomocoins(user.daemonDice.ddHero);
 										user.momocoins += coins;
@@ -265,8 +269,13 @@ module.exports = {
 									let coins = this.GetMomocoins(user.daemonDice.ddHero);
 									user.momocoins += coins;
 
+									// make a copy of the old party
+									let oldParty = user.daemonDice.ddHero.party.map((x) => x);
+									user.daemonDice.ddHero.party = []; // delete party
+
 									user.markModified("daemonDice");
 									user.save().then((updated) => {
+										// if channel_id has been set
 										if (server.config.daemonDice.channel_id !== null) {
 											global.client.channels
 												.fetch(server.config.daemonDice.channel_id)
@@ -306,6 +315,35 @@ module.exports = {
 												.catch((err) => {
 													// Channel ID is not valid.
 												});
+										}
+										// If has party members, disband party
+										if (oldParty.length !== 0) {
+											// for each party member
+											oldParty.forEach((partyMember) => {
+												// read user from DB using ID from party
+												readUser(partyMember.id, user.guild_id)
+													.then((partyUser) => {
+														// remove dead hero from party using filter. Filter elements where element.id is not equal to dead hero's id
+														partyUser.daemonDice.ddHero.party = partyUser.daemonDice.ddHero.party.filter(
+															(el) => el.id !== user.user_id
+														);
+
+														// save party user
+														partyUser.markModified("daemonDice");
+														partyUser.save().then((updated) => {
+															client.users.fetch(partyMember.id).then((res) => {
+																// notify this user that the party was disbanded
+																res.send(
+																	user.daemonDice.ddHero.name +
+																		getModuleString("DAEMON_DICE", "PARTY", user.guild_id).DISBANDED
+																);
+															});
+														});
+													})
+													.catch((err) => {
+														console.log("invalid user when disbanding party after death\n" + err);
+													});
+											});
 										}
 									});
 								}
@@ -420,12 +458,16 @@ module.exports = {
 	 */
 	GetHeroStatus(hero, guild_id) {
 		const embed = new Discord.MessageEmbed().setTitle(hero.name.toUpperCase());
+		let stars = "⭐ ";
+		stars = stars.repeat(hero.glory);
+		stars ? "" : (stars = "-");
 
 		if (!hero.legend) {
-			embed.setDescription(getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).GLORY + hero.glory);
+			embed.addFields({ name: getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).GLORY + hero.glory, value: stars });
 		} else {
-			embed.setDescription(getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).LEGEND);
+			embed.addFields({ name: getModuleString("DAEMON_DICE", "HERO_STATUS", guild_id).LEGEND, value: stars });
 		}
+		embed.addFields({ name: "\u200B", value: "\u200B" });
 		if (hero.party) {
 			if (hero.party.length !== 0) {
 				let partyString = "";
@@ -506,7 +548,7 @@ module.exports = {
 	 * @returns
 	 */
 	GetMomocoins(hero) {
-		let baseValue = (hero.glory + 1) * COINS_PER_GLORY;
+		let baseValue = hero.glory * COINS_PER_GLORY;
 		let randomVariation = Math.random() * COIN_VARIATION_PER_GLORY * hero.glory;
 		let gameOverBonus = hero.legend ? END_GAME_BONUS : 0;
 		return parseInt(baseValue + randomVariation + gameOverBonus);
