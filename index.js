@@ -33,6 +33,8 @@ const strings = require("./strings");
 const guildController = require("./controllers/guildController");
 const { getCurrentServer } = require("./utils");
 
+const AutoPoster = require("topgg-autoposter");
+
 const client = new Discord.Client(); // This client.
 global.client = client;
 
@@ -174,6 +176,15 @@ client.setInterval(() => {
 	// Update activity
 	client.user.setActivity("|help in " + client.guilds.cache.size + " servers!", { type: "PLAYING" });
 }, globals.LOCAL_DATA_INTEGRITY_CHECK_INTERVAL);
+
+// DISCORD BOT LIST AUTOPOSTER
+
+if (process.env.DBL_TOKEN) {
+	const ap = AutoPoster(process.env.DBL_TOKEN, client);
+	ap.on("posted", () => {
+		console.log("Posted stats to Top.gg!");
+	});
+}
 
 // Log in this bot.
 client.login(process.env.TOKEN);
