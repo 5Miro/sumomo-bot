@@ -383,7 +383,7 @@ const LANG_EN = {
 			* Your hero's quests will increase in difficulty until he/she is finally laid to rest.
 			* When this happens, as a reward for your help you will receive Momocoins. The amount depends on the achieved Glory level.
 			* Once passed, the records of the hero's former glory will be carved into stone in a text-channel of your choice.
-			* Use |ddChannel [text-channel-id] to set this channel. The server admin MUST set this value in order for the game to work.
+			* Use |ddChannel [text-channel-id] to set this channel. The server admin MUST set this value in order for the game to work properly.
 			*
 			*/
 		   `,
@@ -405,7 +405,7 @@ const LANG_EN = {
 			*
 			* Your hero can form a party with another hero. If so, both heroes receive a survival chance bonus %.
 			* Use |ddParty [@User] to invite other user to join your hero's party.
-			* Parties last until the adventure ends.
+			* Parties last until your or your party member's adventure ends.
 			*
 			* Your hero's adventure always ends at quest n°10. But who knows? Perhaps we might witness a new LEGEND.
 			*
@@ -799,7 +799,7 @@ const LANG_ES = {
 			* Las misiones de tu héroe aumentan en dificultad hasta que finalmente encuentre su descanso eterno.
 			* Cuando esto pase, como recompensa por tu ayuda recibirás Momocoins. El monto depende del nivel de Gloria alcanzado.
 			* Habiendo pasado a mejor vida, los registros de la Gloria pasada de tu héroe son grabados en piedra en un canal de texto del servidor.
-			* Usa |ddChannel [text-channel-id] para elegir este canal. El admin del servidor debe configurar este valor para que el juego funcione.
+			* Usa |ddChannel [text-channel-id] para elegir este canal. El admin del servidor debe configurar este valor para que el juego funcione apropiadamente.
 			*
 			*/
 		   `,
@@ -821,7 +821,7 @@ const LANG_ES = {
 			*
 			* Tu héroe puede formar un grupo con otro héroe. De ser así, ambos héroes recibirán un % bonus de supervivencia.
 			* Usa |ddParty [@usuario] para invitar a otro usuario a unirse al grupo de tu héroe.
-			* Los grupos duran hasta que la aventura de tu héroe termine.
+			* Los grupos duran hasta que la aventura de tu héroe termine o la de tu compañero.
 			*
 			* La aventura de tu héroe siempre termina en la misión n°10. Pero quién sabe? Quizás seamos testigos de una nueva LEYENDA.
 			*

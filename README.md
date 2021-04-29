@@ -2,6 +2,9 @@
 
 Multipurpose bot for Discord. Sumomo is optimistic, hyperactive and extra kawaii.
 
+UPDATE 25/4/2021:
+> v5.6: daemonDice and economy modules introduced!
+
 UPDATE 30/3/2021:
 > v5.5: calendar module introduced!
 
@@ -52,6 +55,47 @@ Sumomo uses a database to store only _this_ information about the discord users 
 Sumomo **does not** store any other kind of personal information about the user.
 
 Understand that Sumomo works **through** the Discord API, so it is subjected to its rate limitations.
+
+## Modules
+
+-   music
+
+	> Allows Sumomo to reproduce music from Youtube. Individual songs, playlists and search queries are allowed. Planned improvements: 1) more commands, such as |repeat; 2) support for Spotify.
+
+-   participation
+
+	> Sumomo responds to certain messages with her quirky mannerisms, such as when a user claims/divorces a character in Mudae. Planned improvements: more topics of conversation to react to.
+
+-   mudaeAlarm
+
+	> Sumomo notifies subscribed users when their Mudae rolls and claims are reset. This notification is sent as an individual DM to each user. That means that if your rolls reset every hour at xx:15 minutes, you will get a DM from Sumomo as a reminder in that exact moment. Planned improvements: more intuitive way of changing the alarm settings. Multi-language support.
+
+-   friendship
+
+	> Sumomo gains trust with people that participate in text/voice channels. When somebody she really likes joins a voice channel, she might send him a cute DM to welcome him. Planned improvements: more tangible ways for Sumomo to reward users.
+
+-   cleaning
+
+	> Maintenance module meant to erase Sumomo's old messages in DM channels. Those messages are meant to delete themselves after a period of time, but sometimes they fail to do so.
+
+-  calendar
+	>Users register events, such as birthdays or get-togethers, into the calendar. 
+	
+	>If a text-channel id is provided, Sumomo will post the upcoming events on it everyday and the month's calendar.
+	
+	>Events, by default, get deleted the day after they occur. 
+	
+	>For yearly events such as birthdays, the repeat flag must be added to the command. Events with the "repeat" flag on will be rescheduled for the next year the day after they expire. 
+	
+	>	Users can adjust the time zone of the calendar so Sumomo can time the events more accurately.
+
+- daemonDice
+	> A dice RPG game where users roll dice to help their heroes accomplished very peculiar quests written by Sumomo's quirky and fun creativity.
+	
+	> Users gain Momocoins for playing.
+	
+- economy (UNDER WORK)
+	> Users can gain Momocoins through other modules and then spend their currency on unlockable content.
 
 ## Commands
 
@@ -138,38 +182,70 @@ Understand that Sumomo works **through** the Discord API, so it is subjected to 
 -	|calendarHelp
 	> Get a explanation of the calendar commands.
 
-## Modules
+**Daemon Dice commands**
 
--   music
 
-	> Allows Sumomo to reproduce music from Youtube. Individual songs, playlists and search queries are allowed. Planned improvements: 1) more commands, such as |repeat; 2) support for Spotify.
+ You are a Daemon, an ancient guardian angel. As such, heroes are assigned to your care.
 
--   participation
+* Use |ddNew [name] to request a new hero.
 
-	> Sumomo responds to certain messages with her quirky mannerisms, such as when a user claims/divorces a character in Mudae. Planned improvements: more topics of conversation to react to.
+* Use |ddCheck to see your hero's glory, chance of survival, items, achievements and such.
 
--   mudaeAlarm
+ Heroes start with a Glory level 0.
 
-	> Sumomo notifies subscribed users when their Mudae rolls and claims are reset. This notification is sent as an individual DM to each user. That means that if your rolls reset every hour at xx:15 minutes, you will get a DM from Sumomo as a reminder in that exact moment. Planned improvements: more intuitive way of changing the alarm settings. Multi-language support.
+ Your hero's hunger for glory will make him go on quests every hour. You cannot control whether your hero goes or not.
 
--   friendship
+ Your hero will always depart at xx:00.
 
-	> Sumomo gains trust with people that participate in text/voice channels. When somebody she really likes joins a voice channel, she might send him a cute DM to welcome him. Planned improvements: more tangible ways for Sumomo to reward users.
+* Use |ddQuestTime [minutes] to set the exact minutes at which heroes will embark on a quest in your server. (Admin only)
 
--   cleaning
+ Your hero has a chance of success that depends on several factors.
 
-	> Maintenance module meant to erase Sumomo's old messages in DM channels. Those messages are meant to delete themselves after a period of time, but sometimes they fail to do so.
+ To improve your hero's chances of survival, you must roll a Daemon Dice.
 
-- [NEW] calendar
-	>Users register events, such as birthdays or get-togethers, into the calendar. 
-	
-	>If a text-channel id is provided, Sumomo will post the upcoming events on it everyday and the month's calendar.
-	
-	>Events, by default, get deleted the day after they occur. 
-	
-	>For yearly events such as birthdays, the repeat flag must be added to the command. Events with the "repeat" flag on will be rescheduled for the next year the day after they expire. 
-	
-	>	Users can adjust the time zone of the calendar so Sumomo can time the events more accurately.
+ A Daemon Dice is a D20 dice. The result, from 1 to 20, will be added as a %.
+
+* Use |ddRoll to roll the dice. You must roll the dice BEFORE he goes on a quest.
+
+ If your hero survives a quest, he/she gets +1 Glory.
+
+ Your hero's quests will increase in difficulty until he/she is finally laid to rest.
+
+ When this happens, as a reward for your help you will receive Momocoins. The amount depends on the achieved Glory level.
+
+ Once passed, the records of the hero's former glory will be carved into stone in a text-channel of your choice.
+
+* Use |ddChannel [text-channel-id] to set this channel. The server admin MUST set this value in order for the game to work properly.
+
+
+ The result of each quest is sent through a DM to each user.
+
+* Use |ddToggleDM to activate/deactivate this feature for you. This is ON by default.
+
+You can roll the dice up to 3 times per quest. A new result always overwrites the previous result.
+
+> Your first roll is free, but the second and the third cost 20 Momocoins each.
+
+Your hero will gain a new item after returning from a succesful quest as long as you rolled at least a 4 for that quest.
+
+>Heroes can equip up to 5 items simultaneously.
+
+These items will increase your hero's chance of survival for the rest of the adventure. Each item adds a % from +1 to +5.
+
+If a hero gains an item after having already 5, he/she can keep this 6th item separately.
+
+* Use |ddReplaceItem [slot] to replace an old item in the [slot] with the new, 6th item.
+
+* If you choose not to replace it, this 6th item will be lost on your hero's next quest.
+
+
+ Your hero can form a party with another hero. If so, both heroes receive a survival chance bonus %.
+
+* Use |ddParty [@User] to invite other user to join your hero's party.
+
+> Parties last until your or your party member's adventure ends.
+
+Your hero's adventure always ends at quest n°10. But who knows? Perhaps we might witness a new LEGEND.
 
 ## Developer notes
 
@@ -179,15 +255,20 @@ She is a small bot made with affection. I thought of adapting her to public use,
 
 ## Sumomo's future
 
-In the short term, my priorities are giving Sumomo more functionality, while keeping her working properly, fixing bugs and crashes that might spawn. I would like to add modules such as -calendar- (for planning events or reminding birthdays), -moderation- (for different kinds of unwanted content / roles administration) and some other social game for users to interact with each other, along with Sumomo.
+In the short term, my priorities are giving Sumomo more functionality, while keeping her working properly, fixing bugs and crashes that might spawn. 
 
-UPDATE 30/3/2021:
-> v5.5: calendar module introduced!
+So far since published on top.gg, I have added:
+.calendar
+.daemonDice
+.economy (UNDER WORK)
+
+In the medium term, I'm working on making Sumomo a verified bot by Discord.
+
 
 
 # Thanks for using Sumomo
 
-PS: I would appreciate if you could visit my [website](http://www.miromiro.tech/)!
+PS: I would appreciate if you could vote for Sumomo on DBL (https://top.gg/bot/769338863947743274)!
 
 Sincerely,
 Miro
